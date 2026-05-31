@@ -32,7 +32,7 @@ export default function RootLayout({
         </svg>
         <Navbar />
         {children}
-        <Toaster position="bottom-right" />
+<Toaster position="bottom-right" />
       </body>
     </html>
   );
