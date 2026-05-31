@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import Script from "next/script";
 import "@fontsource/nunito/800.css";
 import Navbar from "./components/Navbar";
 import "./globals.css";
@@ -32,7 +31,6 @@ export default function RootLayout({
         </svg>
         <Navbar />
         {children}
-        <Script src="https://t.wormkey.run/.wormkey/overlay.js?slug=wild-storm-95" strategy="afterInteractive" />
       </body>
     </html>
   );
