@@ -67,7 +67,7 @@ export function SegmentedControl<T extends string>({
             }}
             onClick={() => handleSelect(seg.value)}
             className={cn(
-              "relative z-10 inline-flex items-center gap-2 px-4 py-3 rounded-full",
+              "relative z-10 inline-flex items-center gap-2 px-4 py-2 rounded-full",
               "text-ds-body font-medium",
               "transition-[color,scale] duration-150 ease-ds",
               "active:scale-[0.96] cursor-pointer select-none",
