@@ -3,6 +3,25 @@
 @custom-variant hfine (@media (hover: hover) and (pointer: fine));
 @custom-variant dark (&:where(.dark, .dark *));
 
+.headline {
+  color: #0a0a0a;
+}
+
+@keyframes shimmer-headline {
+  from { background-position: 100% 50%; }
+  to   { background-position: 0% 50%; }
+}
+
+.headline-shimmer {
+  background: linear-gradient(90deg, #0a0a0a 30%, #0099FF 50%, #0a0a0a 70%);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-headline 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
 @keyframes shake {
   0%   { transform: translateX(0); }
   15%  { transform: translateX(-6px); }

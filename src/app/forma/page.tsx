@@ -1901,6 +1901,14 @@ export function RadioGroup({ label, options, defaultValue = "", onChange }) {
 
         </section>
       </div>
+
+      <div className="w-full px-4 py-[60px] sm:px-0 sm:py-[120px]">
+        <div className="mx-auto flex max-w-[700px] flex-row flex-wrap items-center justify-center gap-3">
+          <Link href="/"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">Home</SecondaryButton></Link>
+          <a href="https://www.linkedin.com/in/vedant-lad-ba322b206/" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">LinkedIn</SecondaryButton></a>
+          <a href="https://x.com/Vedantdzn" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">X</SecondaryButton></a>
+        </div>
+      </div>
     </main>
   );
 }

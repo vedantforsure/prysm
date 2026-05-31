@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Hero from "./components/Hero";
 import ProjectCard from "./components/ProjectCard";
 import RevealSection from "./components/RevealSection";
@@ -68,10 +69,10 @@ export default function Home() {
         </div>
       </RevealSection>
       <RevealSection className="w-full px-4 py-[60px] sm:px-0 sm:py-[120px]">
-        <div className="mx-auto flex max-w-[700px] flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
-          <SecondaryButton className="!h-[66px] !px-6 !text-[24px] w-full sm:w-auto">AI experiments</SecondaryButton>
-          <SecondaryButton className="!h-[66px] !px-6 !text-[24px] w-full sm:w-auto">LinkedIn</SecondaryButton>
-          <SecondaryButton className="!h-[66px] !px-6 !text-[24px] w-full sm:w-auto">X</SecondaryButton>
+        <div className="mx-auto flex max-w-[700px] flex-row flex-wrap items-center justify-center gap-3">
+          <Link href="/ai-experiments"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">AI experiments</SecondaryButton></Link>
+          <a href="https://www.linkedin.com/in/vedant-lad-ba322b206/" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">LinkedIn</SecondaryButton></a>
+          <a href="https://x.com/Vedantdzn" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">X</SecondaryButton></a>
         </div>
       </RevealSection>
     </main>
