@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 export interface BreadcrumbItem {
   label: string;
   href?: string;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 interface BreadcrumbProps {
@@ -27,6 +28,7 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
             ) : (
               <a
                 href={item.href ?? "#"}
+                onClick={item.onClick ? (e) => { e.preventDefault(); item.onClick!(e); } : undefined}
                 className="text-ds-body font-medium text-ds-neutral-450 transition-colors duration-150 ease-ds hfine:hover:text-ds-neutral-700 dark:hfine:hover:text-ds-neutral-300"
               >
                 {item.label}

@@ -214,6 +214,39 @@ function ComponentTree() {
   );
 }
 
+// ─── Breadcrumb demo ─────────────────────────────────────────────────────────
+
+const CRUMBS = ["Home", "Design System", "Components", "Breadcrumb"];
+
+function BreadcrumbDemo() {
+  const [depth, setDepth] = useState(CRUMBS.length - 1);
+  const [flash, setFlash] = useState(false);
+
+  function navigate(index: number) {
+    if (index >= depth) return;
+    setFlash(true);
+    setTimeout(() => {
+      setDepth(index);
+      setFlash(false);
+      setTimeout(() => {
+        setFlash(true);
+        setTimeout(() => { setDepth(CRUMBS.length - 1); setFlash(false); }, 150);
+      }, 1200);
+    }, 150);
+  }
+
+  const items = CRUMBS.slice(0, depth + 1).map((label, i) => ({
+    label,
+    ...(i < depth ? { onClick: () => navigate(i) } : {}),
+  }));
+
+  return (
+    <div style={{ opacity: flash ? 0 : 1, transition: "opacity 150ms cubic-bezier(0.23,1,0.32,1)" }}>
+      <Breadcrumb items={items} />
+    </div>
+  );
+}
+
 // ─── Tag demo data ────────────────────────────────────────────────────────────
 
 const INITIAL_TAGS = ["Design", "Engineering", "Motion", "Tokens", "React"];
@@ -1032,16 +1065,15 @@ export function Tabs({ tabs, defaultValue, onChange }) {
   );
 }`}
           >
-            <div className="w-full">
-              <Tabs
-                tabs={[
-                  { label: "Overview", value: "overview" },
-                  { label: "Components", value: "components" },
-                  { label: "Tokens", value: "tokens" },
-                  { label: "Changelog", value: "changelog" },
-                ]}
-              />
-            </div>
+            <Tabs
+              className="w-auto"
+              tabs={[
+                { label: "Overview", value: "overview" },
+                { label: "Components", value: "components" },
+                { label: "Tokens", value: "tokens" },
+                { label: "Changelog", value: "changelog" },
+              ]}
+            />
           </ComponentSection>
 
           {/* ── Breadcrumb ── */}
@@ -1076,14 +1108,7 @@ export function Tabs({ tabs, defaultValue, onChange }) {
   );
 }`}
           >
-            <Breadcrumb
-              items={[
-                { label: "Home", href: "#" },
-                { label: "Design System", href: "#" },
-                { label: "Components", href: "#" },
-                { label: "Breadcrumb" },
-              ]}
-            />
+            <BreadcrumbDemo />
           </ComponentSection>
 
           {/* ── SegmentedControl ── */}
