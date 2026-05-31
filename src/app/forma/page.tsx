@@ -1410,7 +1410,7 @@ export function Avatar({ src, alt, fallback, size = "md" }) {
                 <span className="text-ds-body text-ds-neutral-600 dark:text-ds-neutral-500">lg</span>
               </div>
               <div className="flex flex-col items-center gap-2">
-                <Avatar size="lg" src="/x-pfp.jpg" alt="Profile" />
+                <Avatar size="lg" src="/avatar.jpg" alt="Profile" />
                 <span className="text-ds-body text-ds-neutral-600 dark:text-ds-neutral-500">image</span>
               </div>
             </div>
