@@ -3,38 +3,35 @@
 import Link from "next/link";
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import PrimaryButton from "../components/PrimaryButton";
-
 // ─── Tree data ────────────────────────────────────────────────────────────────
 
 const TREE = [
   {
     category: "Actions",
-    components: [
-      { name: "PrimaryButton", variants: ["Default", "Loading", "Disabled"] },
-      { name: "SecondaryButton", variants: ["Default", "Destructive"] },
-    ],
+    components: ["PrimaryButton", "SecondaryButton", "GhostButton", "DestructiveButton", "IconButton"],
   },
   {
     category: "Display",
-    components: [
-      { name: "ProjectCard", variants: ["Default", "Hover"] },
-      { name: "Badge", variants: ["Neutral", "Success", "Error"] },
-    ],
+    components: ["ProjectCard", "Badge"],
   },
   {
     category: "Inputs",
-    components: [
-      { name: "TextInput", variants: ["Default", "Error", "Disabled"] },
-    ],
+    components: ["TextInput"],
   },
 ];
 
+// ─── Forma component imports ───────────────────────────────────────────────────
+
+import { PrimaryButton } from "./components/primary-button";
+import { SecondaryButton } from "./components/secondary-button";
+import { GhostButton } from "./components/ghost-button";
+import { DestructiveButton } from "./components/destructive-button";
+import { IconButton } from "./components/icon-button";
+
 function ComponentTree() {
   const [openCategory, setOpenCategory] = useState<string>("Actions");
-  const [openComponent, setOpenComponent] = useState<string>("");
   const [activeComponent, setActiveComponent] = useState<string>("");
-  const [activeVariant, setActiveVariant] = useState<string>("");
+
   const btnBase = "select-none text-left text-caption min-h-[32px] rounded-md px-2 py-1 active:scale-[0.96] transition-[color,background-color,scale] duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] hover:bg-[#eeeeee] active:bg-[#bbbbbb]";
   const btnStyle = { WebkitTapHighlightColor: "transparent" as const, touchAction: "manipulation" as const };
 
@@ -46,7 +43,7 @@ function ComponentTree() {
           return (
             <div key={category} className="flex flex-col gap-0.5">
               <button
-                onClick={() => { setOpenCategory(isOpen ? "" : category); if (isOpen) { setOpenComponent(""); setActiveComponent(""); setActiveVariant(""); } }}
+                onClick={() => { setOpenCategory(isOpen ? "" : category); if (isOpen) { setActiveComponent(""); } }}
                 className={btnBase}
                 style={{ ...btnStyle, color: isOpen ? "#000000" : "#666666" }}
               >
@@ -64,56 +61,22 @@ function ComponentTree() {
               >
                 <div style={{ overflow: "hidden" }}>
                   <div className="flex flex-col gap-0.5 ml-2 pl-3 pb-1" style={{ borderLeft: "2.5px solid #dddddd" }}>
-                    {components.map(({ name, variants }, i) => (
-                      <div
+                    {components.map((name, i) => (
+                      <button
                         key={name}
-                        className="flex flex-col gap-0.5"
+                        onClick={() => setActiveComponent(activeComponent === name ? "" : name)}
+                        className={btnBase}
                         style={{
+                          ...btnStyle,
+                          color: activeComponent === name ? "#000000" : "#666666",
                           opacity: isOpen ? 1 : 0,
-                          transition: "opacity 150ms cubic-bezier(0.23,1,0.32,1)",
+                          transition: "opacity 150ms cubic-bezier(0.23,1,0.32,1), color 150ms cubic-bezier(0.23,1,0.32,1), background-color 150ms cubic-bezier(0.23,1,0.32,1), scale 150ms cubic-bezier(0.23,1,0.32,1)",
                           transitionDelay: isOpen ? `${i * 35}ms` : "0ms",
+                          pointerEvents: isOpen ? "auto" : "none",
                         }}
                       >
-                        <button
-                          onClick={() => { const closing = openComponent === name; setOpenComponent(closing ? "" : name); setActiveComponent(closing ? "" : name); setActiveVariant(""); }}
-                          className={btnBase}
-                          style={{ ...btnStyle, color: activeComponent === name ? "#000000" : "#666666" }}
-                        >
-                          {name}
-                        </button>
-
-                        <div
-                          style={{
-                            display: "grid",
-                            gridTemplateRows: openComponent === name ? "1fr" : "0fr",
-                            transition: openComponent === name
-                              ? "grid-template-rows 250ms cubic-bezier(0.23,1,0.32,1)"
-                              : "grid-template-rows 180ms cubic-bezier(0.32,0.72,0,1)",
-                          }}
-                        >
-                          <div style={{ overflow: "hidden" }}>
-                            <div className="flex flex-col gap-0.5 ml-2 pl-3" style={{ borderLeft: "2.5px solid #dddddd" }}>
-                              {variants.map((variant, vi) => (
-                                <button
-                                  key={variant}
-                                  onClick={() => { setActiveVariant(variant); setActiveComponent(name); }}
-                                  className={btnBase}
-                                  style={{
-                                    ...btnStyle,
-                                    color: activeVariant === variant ? "#000000" : "#666666",
-                                    opacity: openComponent === name ? 1 : 0,
-                                    transition: "opacity 150ms cubic-bezier(0.23,1,0.32,1), color 150ms cubic-bezier(0.23,1,0.32,1), background-color 150ms cubic-bezier(0.23,1,0.32,1), scale 150ms cubic-bezier(0.23,1,0.32,1)",
-                                    transitionDelay: openComponent === name ? `${vi * 25}ms` : "0ms",
-                                    pointerEvents: openComponent === name ? "auto" : "none",
-                                  }}
-                                >
-                                  {variant}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                        {name}
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -161,9 +124,9 @@ function ComponentSection({ name, description, code, children }: ComponentSectio
       <div
         className="rounded-2xl overflow-hidden"
         style={{
-          border: "1px solid rgba(0,0,0,0.07)",
+          border: "1px solid rgba(0,0,0,0.2)",
           transition: "background 200ms cubic-bezier(0.23,1,0.32,1)",
-          background: dark ? "#111111" : "#f7f7f7",
+          background: dark ? "#000000" : "#ffffff",
         }}
       >
         {/* Toolbar */}
@@ -222,7 +185,7 @@ function ComponentSection({ name, description, code, children }: ComponentSectio
         </div>
 
         {/* Component preview */}
-        <div className="flex items-center justify-center flex-wrap gap-4 px-6 py-10 sm:py-14">
+        <div className={`flex items-center justify-center flex-wrap gap-4 px-6 py-10 sm:py-14${dark ? " dark" : ""}`}>
           {children}
         </div>
 
@@ -328,51 +291,56 @@ export default function FormaPage() {
         <section className="flex flex-col gap-12 pb-[80px] sm:pb-[120px]">
           <ComponentSection
             name="PrimaryButton"
-            description="The main call-to-action button. Gradient fill, pill shape, subtle press scale."
-            code={`<PrimaryButton>Get started</PrimaryButton>\n\n<PrimaryButton>Save changes</PrimaryButton>`}
+            description="The primary action button. Black fill, pill shape, subtle press scale. Use for the single most important action on a screen."
+            code={`import { PrimaryButton } from "@forma/ui"
+
+<PrimaryButton>Proceed</PrimaryButton>
+<PrimaryButton disabled>Disabled</PrimaryButton>`}
           >
-            <PrimaryButton>Get started</PrimaryButton>
-            <PrimaryButton>Save changes</PrimaryButton>
+            <PrimaryButton>Proceed</PrimaryButton>
+            <PrimaryButton disabled>Disabled</PrimaryButton>
           </ComponentSection>
+
           <ComponentSection
-            name="PrimaryButton"
-            description="The main call-to-action button. Gradient fill, pill shape, subtle press scale."
-            code={`<PrimaryButton>Get started</PrimaryButton>\n\n<PrimaryButton>Save changes</PrimaryButton>`}
+            name="SecondaryButton"
+            description="Secondary action. White fill with a subtle border. Pairs with PrimaryButton for two-action layouts."
+            code={`import { SecondaryButton } from "@forma/ui"
+
+<SecondaryButton>Go Back</SecondaryButton>
+<SecondaryButton disabled>Disabled</SecondaryButton>`}
           >
-            <PrimaryButton>Get started</PrimaryButton>
-            <PrimaryButton>Save changes</PrimaryButton>
+            <SecondaryButton>Go Back</SecondaryButton>
+            <SecondaryButton disabled>Disabled</SecondaryButton>
           </ComponentSection>
+
           <ComponentSection
-            name="PrimaryButton"
-            description="The main call-to-action button. Gradient fill, pill shape, subtle press scale."
-            code={`<PrimaryButton>Get started</PrimaryButton>\n\n<PrimaryButton>Save changes</PrimaryButton>`}
+            name="GhostButton"
+            description="Lowest visual weight. No background or border — text only. Use for tertiary actions that should recede."
+            code={`import { GhostButton } from "@forma/ui"
+
+<GhostButton>Cancel</GhostButton>`}
           >
-            <PrimaryButton>Get started</PrimaryButton>
-            <PrimaryButton>Save changes</PrimaryButton>
+            <GhostButton>Cancel</GhostButton>
           </ComponentSection>
+
           <ComponentSection
-            name="PrimaryButton"
-            description="The main call-to-action button. Gradient fill, pill shape, subtle press scale."
-            code={`<PrimaryButton>Get started</PrimaryButton>\n\n<PrimaryButton>Save changes</PrimaryButton>`}
+            name="DestructiveButton"
+            description="For irreversible destructive actions like delete or remove. Red fill signals danger clearly."
+            code={`import { DestructiveButton } from "@forma/ui"
+
+<DestructiveButton>Delete</DestructiveButton>`}
           >
-            <PrimaryButton>Get started</PrimaryButton>
-            <PrimaryButton>Save changes</PrimaryButton>
+            <DestructiveButton />
           </ComponentSection>
+
           <ComponentSection
-            name="PrimaryButton"
-            description="The main call-to-action button. Gradient fill, pill shape, subtle press scale."
-            code={`<PrimaryButton>Get started</PrimaryButton>\n\n<PrimaryButton>Save changes</PrimaryButton>`}
+            name="IconButton"
+            description="Icon-only action. Fixed 40×40 hit area with a circular hover state. Always include an aria-label."
+            code={`import { IconButton } from "@forma/ui"
+
+<IconButton label="Add" icon={<PlusIcon />} />`}
           >
-            <PrimaryButton>Get started</PrimaryButton>
-            <PrimaryButton>Save changes</PrimaryButton>
-          </ComponentSection>
-          <ComponentSection
-            name="PrimaryButton"
-            description="The main call-to-action button. Gradient fill, pill shape, subtle press scale."
-            code={`<PrimaryButton>Get started</PrimaryButton>\n\n<PrimaryButton>Save changes</PrimaryButton>`}
-          >
-            <PrimaryButton>Get started</PrimaryButton>
-            <PrimaryButton>Save changes</PrimaryButton>
+            <IconButton label="Add" />
           </ComponentSection>
         </section>
       </div>

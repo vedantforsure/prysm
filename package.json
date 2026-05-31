@@ -12,11 +12,13 @@
     "@fontsource/nunito": "^5.2.7",
     "@fontsource/open-runde": "^5.2.1",
     "@paper-design/shaders-react": "^0.0.76",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
     "geist": "^1.7.1",
     "next": "16.2.6",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
