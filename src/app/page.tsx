@@ -1,65 +1,78 @@
-import Image from "next/image";
+"use client";
+
+import { useRouter } from "next/navigation";
+import Hero from "./components/Hero";
+import ProjectCard from "./components/ProjectCard";
+import SecondaryButton from "./components/SecondaryButton";
 
 export default function Home() {
+  const router = useRouter();
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="flex flex-1 flex-col bg-white">
+      <Hero />
+      <section className="w-full px-4 py-[24px] sm:px-0 sm:py-[60px]">
+        <div className="mx-auto max-w-[700px] flex flex-col gap-5">
+          <span
+            className="text-display sm:![font-size:44px] self-start"
+            style={{
+              fontSize: "32px",
+              lineHeight: "36px",
+              letterSpacing: "-1.5px",
+              background: "linear-gradient(to right, rgba(153,153,153,0.3) 0%, #999999 35%, #999999 75%, rgba(153,153,153,0.3) 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Work
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <ProjectCard
+            name="Forma"
+            description="A minimal, opinionated design system for React apps."
+            onClick={() => router.push("/forma")}
+            background={
+              <>
+                <img src="/card-bg.png" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ outline: "1px solid rgba(255,255,255,0.06)" }} />
+                <img src="/scout.svg" alt="" className="absolute inset-0 m-auto w-16 h-16 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+              </>
+            }
+          />
+          <ProjectCard
+            name="Editage"
+            description="A collection of projects i worked on during my time at Editage."
+            background={
+              <>
+                <img src="/card-bg-2.png" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ outline: "1px solid rgba(255,255,255,0.06)" }} />
+                <img src="/vector.svg" alt="" className="absolute inset-0 m-auto w-40 h-16 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+              </>
+            }
+          />
+          <ProjectCard
+            name="Reva Dashboard"
+            description="An AI powered dashboard to manage your online thrift store."
+            background={
+              <>
+                <img
+                  src="/card-bg-3.png"
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ objectPosition: "50% 100%", outline: "1px solid rgba(255,255,255,0.06)" }}
+                />
+                <img src="/t.svg" alt="" className="absolute inset-0 m-auto w-16 h-16 object-contain pointer-events-none" style={{ filter: "brightness(0) invert(1)" }} />
+              </>
+            }
+          />
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+      <section className="w-full px-4 py-[60px] sm:px-0 sm:py-[120px]">
+        <div className="mx-auto flex max-w-[700px] flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+          <SecondaryButton className="!h-[66px] !px-6 !text-[24px] w-full sm:w-auto">AI experiments</SecondaryButton>
+          <SecondaryButton className="!h-[66px] !px-6 !text-[24px] w-full sm:w-auto">LinkedIn</SecondaryButton>
+          <SecondaryButton className="!h-[66px] !px-6 !text-[24px] w-full sm:w-auto">X</SecondaryButton>
+        </div>
+      </section>
+    </main>
   );
 }

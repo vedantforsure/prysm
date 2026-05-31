@@ -22,5 +22,147 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to bottom, white 30%, transparent);
+  pointer-events: none;
+  z-index: 40;
+  opacity: 0;
+  animation: fade-overlay linear forwards;
+  animation-timeline: scroll(root);
+  animation-range: 0px 80px;
+}
+
+@keyframes fade-overlay {
+  to { opacity: 1; }
+}
+
+button, [role="button"], .project-card {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (max-width: 639px) {
+  .card-noise {
+    display: none;
+  }
+}
+
+@keyframes hero-fade-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.hero-fade {
+  opacity: 0;
+  animation: hero-fade-in 300ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.hero-fade-1 {
+  animation-delay: 0ms;
+}
+
+.hero-fade-2 {
+  animation-delay: 60ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+.project-card {
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  animation: card-fade-in 300ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.project-card:active {
+  transform: scale(0.98);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.project-card:nth-child(1) { animation-delay: 0ms; }
+.project-card:nth-child(2) { animation-delay: 70ms; }
+.project-card:nth-child(3) { animation-delay: 140ms; }
+
+@keyframes card-fade-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card {
+    animation: none;
+    opacity: 1;
+    transition: none;
+  }
+}
+
+.text-display {
+  font-family: 'Nunito', sans-serif;
+  font-size: 48px;
+  line-height: 64px;
+  letter-spacing: -3px;
+  font-weight: 800;
+  text-wrap: balance;
+}
+
+@media (min-width: 640px) {
+  .text-display {
+    font-size: 60px;
+  }
+}
+
+.text-caption {
+  font-family: var(--font-geist-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #666666;
+}
+
+.text-body {
+  font-family: var(--font-geist-sans);
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.1px;
+  font-weight: 500;
+  color: #666666;
+  text-wrap: pretty;
+}
+
+@media (min-width: 640px) {
+  .text-body {
+    font-size: 18px;
+  }
 }
