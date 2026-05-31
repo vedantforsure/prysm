@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
 // ─── Tree data ────────────────────────────────────────────────────────────────
 
 const TREE = [
@@ -90,10 +89,55 @@ import { ColorSwatch } from "./components/color-swatch";
 import { MotionSwatch } from "./components/motion-swatch";
 
 function ComponentTree() {
-  const [openCategory, setOpenCategory] = useState<string>("Actions");
+  const [openCategory, setOpenCategory] = useState<string>("");
   const [activeComponent, setActiveComponent] = useState<string>("");
+  const intersectingIds = useRef<Set<string>>(new Set());
 
-  const btnBase = "select-none w-fit text-left text-ds-body font-medium rounded-md px-3 py-2 active:scale-[0.96] transition-[color,background-color,scale] duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] hover:bg-[#eeeeee] active:bg-[#bbbbbb]";
+  useEffect(() => {
+    const idToMeta: Record<string, { category: string; name: string }> = {};
+    const orderedIds: string[] = [];
+    TREE.forEach(({ category, components }) => {
+      components.forEach((name) => {
+        const id = name.toLowerCase().replace(/\s+/g, "-");
+        idToMeta[id] = { category, name };
+        orderedIds.push(id);
+      });
+    });
+
+    const updateActive = () => {
+      for (const id of orderedIds) {
+        if (intersectingIds.current.has(id)) {
+          const meta = idToMeta[id];
+          setActiveComponent(meta.name);
+          setOpenCategory(meta.category);
+          return;
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            intersectingIds.current.add(entry.target.id);
+          } else {
+            intersectingIds.current.delete(entry.target.id);
+          }
+        });
+        updateActive();
+      },
+      { rootMargin: "-10% 0px -60% 0px" }
+    );
+
+    orderedIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const btnBase = "select-none w-fit text-left text-ds-body font-medium rounded-md px-3 py-2 active:scale-[0.96] transition-[color,background-color,scale] duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] hfine:hover:bg-[#eeeeee] active:bg-[#bbbbbb]";
   const btnStyle = { WebkitTapHighlightColor: "transparent" as const, touchAction: "manipulation" as const };
 
   return (
@@ -127,6 +171,7 @@ function ComponentTree() {
                         key={name}
                         onClick={() => {
                           setActiveComponent(name);
+                          setOpenCategory(category);
                           const id = name.toLowerCase().replace(/\s+/g, "-");
                           document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
                         }}
@@ -134,8 +179,10 @@ function ComponentTree() {
                         style={{
                           ...btnStyle,
                           color: activeComponent === name ? "#000000" : "#666666",
+                          background: activeComponent === name ? "rgba(0,0,0,0.06)" : "transparent",
                           opacity: isOpen ? 1 : 0,
-                          transition: "opacity 150ms cubic-bezier(0.23,1,0.32,1), color 150ms cubic-bezier(0.23,1,0.32,1), background-color 150ms cubic-bezier(0.23,1,0.32,1), scale 150ms cubic-bezier(0.23,1,0.32,1)",
+                          transform: isOpen ? "translateY(0)" : "translateY(4px)",
+                          transition: "opacity 150ms cubic-bezier(0.23,1,0.32,1), transform 150ms cubic-bezier(0.23,1,0.32,1), color 150ms cubic-bezier(0.23,1,0.32,1), background-color 150ms cubic-bezier(0.23,1,0.32,1), scale 150ms cubic-bezier(0.23,1,0.32,1)",
                           transitionDelay: isOpen ? `${i * 35}ms` : "0ms",
                           pointerEvents: isOpen ? "auto" : "none",
                         }}
