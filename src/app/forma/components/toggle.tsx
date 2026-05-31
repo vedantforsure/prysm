@@ -54,7 +54,7 @@ export function Toggle({ label, description, defaultChecked = false, onChange }:
         {description && (
           <span className="text-ds-body text-ds-neutral-600 dark:text-ds-neutral-500 text-pretty">{description}</span>
         )}
-      </label>
+      </div>
     </div>
   );
 }

@@ -50,8 +50,8 @@ export function Tooltip({ content, side = "top", children, className }: TooltipP
         aria-hidden={!visible}
         className={cn(
           "pointer-events-none absolute z-50 w-max max-w-[200px]",
-          "px-2 py-1 rounded-[6px]",
-          "font-sans text-ds-body font-medium",
+          "px-2 py-1 rounded-[4px]",
+          "font-sans text-[13px] leading-[18px] font-medium",
           "bg-[#111111] text-white dark:bg-white dark:text-[#111111]",
           className,
         )}
