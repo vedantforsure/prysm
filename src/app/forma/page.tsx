@@ -662,7 +662,7 @@ function ComponentSection({ name, description, code, children, overflowPreview, 
 
 export default function FormaPage() {
   return (
-    <main className="flex flex-1 flex-col bg-white">
+    <main className="flex flex-1 flex-col bg-white overflow-x-clip">
       {/* Back link — fixed top-left, above scroll mask */}
       <div className="fixed top-5 left-5 z-50 hero-fade hero-fade-2">
         <Link
@@ -687,7 +687,7 @@ export default function FormaPage() {
 
       <div className="mx-auto w-full max-w-[700px] px-4 sm:px-0">
         {/* Hero */}
-        <section className="py-[40px] sm:py-[60px] flex flex-col gap-3">
+        <section className="pt-[80px] pb-[24px] sm:py-[60px] flex flex-col gap-3">
           <h1
             className="text-display hero-fade hero-fade-1 self-start"
             style={{
