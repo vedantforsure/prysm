@@ -21,11 +21,12 @@ export function DestructiveButton({
         "border border-black/16 dark:border-white/16",
         "font-sans font-medium text-ds-body text-white whitespace-nowrap",
         "bg-[#FF0000]",
-        "transition-[background-color,scale] duration-150 ease-ds",
-        "active:scale-[0.96]",
-        "hfine:hover:bg-[#E00000]",
-        "active:bg-[#9D0000]",
-        "cursor-pointer",
+        "transition-[background-color,scale,opacity] duration-150 ease-ds",
+        "enabled:active:scale-[0.96]",
+        "enabled:hfine:hover:bg-[#E00000]",
+        "enabled:active:bg-[#9D0000]",
+        "disabled:opacity-50 disabled:cursor-not-allowed",
+        "enabled:cursor-pointer",
         "select-none",
         className
       )}

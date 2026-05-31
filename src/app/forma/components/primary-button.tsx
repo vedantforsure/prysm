@@ -26,12 +26,14 @@ export function PrimaryButton({
         "font-sans font-medium text-ds-body text-white dark:text-black whitespace-nowrap",
         // Colors & transitions
         "bg-black dark:bg-white",
-        "transition-[background-color,scale] duration-150 ease-ds",
-        "active:scale-[0.96]",
-        // States
-        "hfine:hover:bg-[#333333] dark:hfine:hover:bg-ds-neutral-200",
-        "active:bg-[#888888] dark:active:bg-ds-neutral-400",
-        "cursor-pointer",
+        "transition-[background-color,scale,opacity] duration-150 ease-ds",
+        "enabled:active:scale-[0.96]",
+        // Enabled states
+        "enabled:hfine:hover:bg-[#333333] dark:enabled:hfine:hover:bg-ds-neutral-200",
+        "enabled:active:bg-[#888888] dark:enabled:active:bg-ds-neutral-400",
+        // Disabled state
+        "disabled:opacity-50 disabled:cursor-not-allowed",
+        "enabled:cursor-pointer",
         "select-none",
         className
       )}

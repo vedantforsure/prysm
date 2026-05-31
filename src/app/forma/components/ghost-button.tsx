@@ -21,11 +21,12 @@ export function GhostButton({
         "font-sans font-medium text-ds-body whitespace-nowrap",
         "text-ds-neutral-1000 dark:text-ds-neutral-0",
         "bg-transparent border-none",
-        "transition-[color,scale] duration-150 ease-ds",
-        "active:scale-[0.96]",
-        "hfine:hover:text-ds-neutral-700 dark:hfine:hover:text-ds-neutral-400",
-        "active:text-ds-neutral-500",
-        "cursor-pointer",
+        "transition-[color,scale,opacity] duration-150 ease-ds",
+        "enabled:active:scale-[0.96]",
+        "enabled:hfine:hover:text-ds-neutral-700 dark:enabled:hfine:hover:text-ds-neutral-400",
+        "enabled:active:text-ds-neutral-500",
+        "disabled:opacity-50 disabled:cursor-not-allowed",
+        "enabled:cursor-pointer",
         "select-none",
         className
       )}

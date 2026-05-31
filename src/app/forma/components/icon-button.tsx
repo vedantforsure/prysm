@@ -22,11 +22,12 @@ export function IconButton({
         "w-10 h-10 rounded-full shrink-0",
         "text-black dark:text-white",
         "bg-transparent",
-        "transition-[background-color,scale] duration-150 ease-ds",
-        "active:scale-[0.96]",
-        "hfine:hover:bg-ds-neutral-100 dark:hfine:hover:bg-ds-neutral-100/10",
-        "active:bg-ds-neutral-400 dark:active:bg-ds-neutral-400/20",
-        "cursor-pointer select-none",
+        "transition-[background-color,scale,opacity] duration-150 ease-ds",
+        "enabled:active:scale-[0.96]",
+        "enabled:hfine:hover:bg-ds-neutral-100 dark:enabled:hfine:hover:bg-ds-neutral-100/10",
+        "enabled:active:bg-ds-neutral-400 dark:enabled:active:bg-ds-neutral-400/20",
+        "disabled:opacity-50 disabled:cursor-not-allowed",
+        "enabled:cursor-pointer select-none",
         className
       )}
       {...props}
