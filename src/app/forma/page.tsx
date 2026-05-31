@@ -291,22 +291,28 @@ function DrawerDemo() {
 }
 
 function PopoverDemo() {
-  const options = ["Duplicate", "Rename", "Move to…", "Delete"];
   return (
     <Popover
       trigger={<SecondaryButton>Open popover</SecondaryButton>}
       side="bottom"
       align="start"
     >
-      <div className="flex flex-col py-1 min-w-[160px]">
-        {options.map((opt) => (
-          <button
-            key={opt}
-            className={`text-left px-4 py-2 text-ds-body font-medium hfine:hover:bg-ds-neutral-50 transition-colors duration-100 ${opt === "Delete" ? "text-red-500" : "text-ds-neutral-1000 dark:text-ds-neutral-0"}`}
-          >
-            {opt}
+      <div className="flex flex-col p-1">
+        {[
+          { label: "Edit",      sub: "Make changes to this item" },
+          { label: "Duplicate", sub: "Create an identical copy" },
+          { label: "Archive",   sub: "Hide without deleting" },
+        ].map(({ label, sub }) => (
+          <button key={label} className="flex flex-col gap-0.5 text-left px-3 py-2 rounded-lg hfine:hover:bg-ds-neutral-100 dark:hfine:hover:bg-neutral-800 transition-colors duration-100 cursor-pointer">
+            <span className="font-sans text-ds-body font-medium text-ds-neutral-1000 dark:text-ds-neutral-0">{label}</span>
+            <span className="font-sans text-ds-body font-medium text-ds-neutral-500">{sub}</span>
           </button>
         ))}
+        <div className="h-px bg-black/[0.06] dark:bg-white/[0.06] my-1" />
+        <button className="flex flex-col gap-0.5 text-left px-3 py-2 rounded-lg hfine:hover:bg-red-50 dark:hfine:hover:bg-red-950/30 transition-colors duration-100 cursor-pointer">
+          <span className="font-sans text-ds-body font-medium text-[#FF0000]">Delete</span>
+          <span className="font-sans text-ds-body font-medium text-ds-neutral-500">Permanently remove this item</span>
+        </button>
       </div>
     </Popover>
   );
