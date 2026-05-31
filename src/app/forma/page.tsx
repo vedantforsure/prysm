@@ -25,6 +25,14 @@ const TREE = [
     category: "Data Display",
     components: ["Table", "Avatar", "Tag"],
   },
+  {
+    category: "Overlays",
+    components: ["Modal", "Drawer", "Popover", "Tooltip"],
+  },
+  {
+    category: "Forms",
+    components: ["TextInput", "Textarea", "Checkbox", "Toggle", "RadioGroup"],
+  },
 ];
 
 // ─── Foundations data ─────────────────────────────────────────────────────────
@@ -100,6 +108,15 @@ import { SegmentedControl } from "./components/segmented-control";
 import { Table } from "./components/table";
 import { Avatar } from "./components/avatar";
 import { Tag } from "./components/tag";
+import { Modal } from "./components/modal";
+import { Drawer } from "./components/drawer";
+import { Popover } from "./components/popover";
+import { Tooltip } from "./components/tooltip";
+import { TextInput } from "./components/text-input";
+import { Textarea } from "./components/textarea";
+import { Checkbox } from "./components/checkbox";
+import { Toggle } from "./components/toggle";
+import { RadioGroup } from "./components/radio-group";
 
 function ComponentTree() {
   const [openCategory, setOpenCategory] = useState<string>("");
@@ -211,6 +228,100 @@ function ComponentTree() {
         })}
       </div>
     </nav>
+  );
+}
+
+// ─── Overlay demos ───────────────────────────────────────────────────────────
+
+function ModalDemo() {
+  const [open, setOpen] = useState<"confirm" | "destructive" | null>(null);
+  return (
+    <>
+      <div className="flex flex-wrap gap-3">
+        <SecondaryButton onClick={() => setOpen("confirm")}>Open modal</SecondaryButton>
+        <DestructiveButton onClick={() => setOpen("destructive")}>Delete modal</DestructiveButton>
+      </div>
+      <Modal
+        open={open === "confirm"}
+        onClose={() => setOpen(null)}
+        title="Save changes?"
+        description="Your unsaved changes will be lost if you navigate away. Do you want to save before continuing?"
+        confirmLabel="Save"
+        cancelLabel="Discard"
+      />
+      <Modal
+        open={open === "destructive"}
+        onClose={() => setOpen(null)}
+        title="Delete account?"
+        description="This action is permanent and cannot be undone. All your data will be removed immediately."
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        destructive
+      />
+    </>
+  );
+}
+
+function DrawerDemo() {
+  const [open, setOpen] = useState<"right" | "bottom" | null>(null);
+  return (
+    <>
+      <div className="flex flex-wrap gap-3">
+        <SecondaryButton onClick={() => setOpen("right")}>Right drawer</SecondaryButton>
+        <SecondaryButton onClick={() => setOpen("bottom")}>Bottom drawer</SecondaryButton>
+      </div>
+      <Drawer open={open === "right"} onClose={() => setOpen(null)} side="right" title="Settings">
+        <div className="flex flex-col gap-5">
+          <Toggle label="Dark mode" />
+          <Toggle label="Email notifications" description="Receive updates about your account." defaultChecked />
+          <TextInput label="Display name" placeholder="Vedant Lad" />
+        </div>
+      </Drawer>
+      <Drawer open={open === "bottom"} onClose={() => setOpen(null)} side="bottom" title="Filters">
+        <div className="flex flex-col gap-5">
+          <RadioGroup label="Sort by" defaultValue="recent" options={[
+            { value: "recent",   label: "Most recent"  },
+            { value: "popular",  label: "Most popular" },
+            { value: "az",       label: "A → Z"        },
+          ]} />
+        </div>
+      </Drawer>
+    </>
+  );
+}
+
+function PopoverDemo() {
+  const options = ["Duplicate", "Rename", "Move to…", "Delete"];
+  return (
+    <Popover
+      trigger={<SecondaryButton>Open popover</SecondaryButton>}
+      side="bottom"
+      align="start"
+    >
+      <div className="flex flex-col py-1 min-w-[160px]">
+        {options.map((opt) => (
+          <button
+            key={opt}
+            className={`text-left px-4 py-2 text-ds-body font-medium hfine:hover:bg-ds-neutral-50 transition-colors duration-100 ${opt === "Delete" ? "text-red-500" : "text-ds-neutral-1000 dark:text-ds-neutral-0"}`}
+          >
+            {opt}
+          </button>
+        ))}
+      </div>
+    </Popover>
+  );
+}
+
+function TooltipDemo() {
+  const sides = ["top", "right", "bottom", "left"] as const;
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-4">
+      {sides.map((side) => (
+        <Tooltip key={side} content={`Tooltip on ${side}`} side={side}>
+          <SecondaryButton>{side}</SecondaryButton>
+        </Tooltip>
+      ))}
+    </div>
   );
 }
 
@@ -1317,6 +1428,363 @@ export function Tag({ label, onRemove, removing = false }) {
 .tag-pill.is-removing { opacity: 0; transform: scale(0.85); max-width: 0; }`}
           >
             <TagDemo />
+          </ComponentSection>
+
+          {/* ── Modal ── */}
+          <ComponentSection
+            name="Modal"
+            description="Full-screen dialog with backdrop, scale+fade entrance, and Escape key dismissal. Confirm and destructive variants."
+            code={`"use client";
+
+export function Modal({ open, onClose, title, description, confirmLabel = "Confirm", destructive = false, onConfirm }) {
+  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      const raf = requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
+      return () => cancelAnimationFrame(raf);
+    } else {
+      setVisible(false);
+      const t = setTimeout(() => setMounted(false), 250);
+      return () => clearTimeout(t);
+    }
+  }, [open]);
+
+  if (!mounted) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40"
+        style={{ opacity: visible ? 1 : 0, transition: "opacity 200ms cubic-bezier(0.23,1,0.32,1)" }}
+        onClick={onClose}
+      />
+      <div className="relative w-full max-w-[500px] bg-white rounded-[20px] p-5 flex flex-col gap-5"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "scale(1) translateY(0)" : "scale(0.96) translateY(8px)",
+          transition: "opacity 250ms cubic-bezier(0.23,1,0.32,1), transform 250ms cubic-bezier(0.23,1,0.32,1)",
+        }}
+      >
+        <h2 className="text-ds-h1 font-medium">{title}</h2>
+        {description && <p className="text-ds-body text-ds-neutral-600">{description}</p>}
+        <div className="flex justify-end gap-3">
+          <SecondaryButton onClick={onClose}>{cancelLabel}</SecondaryButton>
+          {destructive
+            ? <DestructiveButton onClick={() => { onConfirm?.(); onClose(); }}>{confirmLabel}</DestructiveButton>
+            : <PrimaryButton onClick={() => { onConfirm?.(); onClose(); }}>{confirmLabel}</PrimaryButton>}
+        </div>
+      </div>
+    </div>
+  );
+}`}
+          >
+            <ModalDemo />
+          </ComponentSection>
+
+          {/* ── Drawer ── */}
+          <ComponentSection
+            name="Drawer"
+            description="Panel that slides in from the right or bottom. Blur backdrop, Escape dismissal. Content scrolls independently."
+            code={`"use client";
+
+export function Drawer({ open, onClose, side = "right", title, children }) {
+  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const isRight = side === "right";
+
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      const raf = requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
+      return () => cancelAnimationFrame(raf);
+    } else {
+      setVisible(false);
+      const t = setTimeout(() => setMounted(false), 300);
+      return () => clearTimeout(t);
+    }
+  }, [open]);
+
+  if (!mounted) return null;
+  return (
+    <div className="fixed inset-0 z-50">
+      <div className="absolute inset-0 backdrop-blur-[2px]"
+        style={{ opacity: visible ? 1 : 0, transition: "opacity 250ms cubic-bezier(0.23,1,0.32,1)" }}
+        onClick={onClose}
+      />
+      <div className="absolute bg-white flex flex-col rounded-[20px]"
+        style={{
+          ...(isRight ? { top: 12, right: 12, bottom: 12, width: 360 } : { bottom: 12, left: 12, right: 12 }),
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translate(0,0)" : isRight ? "translateX(calc(100% + 12px))" : "translateY(calc(100% + 12px))",
+          transition: "opacity 300ms cubic-bezier(0.23,1,0.32,1), transform 300ms cubic-bezier(0.23,1,0.32,1)",
+        }}
+      >
+        <div className="flex items-center justify-between px-6 py-5 border-b border-black/8">
+          <h2 className="text-ds-h1 font-medium">{title}</h2>
+          <IconButton label="Close" onClick={onClose} />
+        </div>
+        <div className="flex-1 overflow-y-auto px-6 py-5">{children}</div>
+      </div>
+    </div>
+  );
+}`}
+          >
+            <DrawerDemo />
+          </ComponentSection>
+
+          {/* ── Popover ── */}
+          <ComponentSection
+            name="Popover"
+            description="Trigger-anchored panel. Closes on outside click or Escape. Supports top, bottom, left, right with start, center, end alignment."
+            code={`"use client";
+
+export function Popover({ trigger, children, side = "bottom", align = "start" }) {
+  const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const wrapRef = useRef(null);
+
+  const show = () => { setOpen(true); requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true))); };
+  const hide = () => { setVisible(false); setTimeout(() => setOpen(false), 180); };
+
+  useEffect(() => {
+    const onPointer = (e) => { if (!wrapRef.current?.contains(e.target)) hide(); };
+    if (open) document.addEventListener("pointerdown", onPointer);
+    return () => document.removeEventListener("pointerdown", onPointer);
+  }, [open]);
+
+  return (
+    <div ref={wrapRef} className="relative inline-flex">
+      <div onClick={() => open ? hide() : show()}>{trigger}</div>
+      {open && (
+        <div className="absolute top-full mt-2 left-0 z-40 bg-white border border-black/8 rounded-xl shadow-md"
+          style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(-4px)", transition: "opacity 180ms, transform 180ms" }}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}`}
+          >
+            <PopoverDemo />
+          </ComponentSection>
+
+          {/* ── Tooltip ── */}
+          <ComponentSection
+            name="Tooltip"
+            description="200ms delay before appearing. Four sides. Fades and slides in from 4px offset."
+            code={`"use client";
+
+export function Tooltip({ content, side = "top", children }) {
+  const [visible, setVisible] = useState(false);
+  const timer = useRef(null);
+
+  const show = () => { timer.current = setTimeout(() => setVisible(true), 200); };
+  const hide = () => { clearTimeout(timer.current); setVisible(false); };
+
+  const pos = {
+    top:    { bottom: "calc(100% + 8px)", left: "50%", enter: "translateX(-50%) translateY(0)",  exit: "translateX(-50%) translateY(4px)" },
+    bottom: { top:    "calc(100% + 8px)", left: "50%", enter: "translateX(-50%) translateY(0)",  exit: "translateX(-50%) translateY(-4px)" },
+  }[side];
+
+  return (
+    <span className="relative inline-flex">
+      <span onMouseEnter={show} onMouseLeave={hide}>{children}</span>
+      <span className="pointer-events-none absolute z-50 px-2 py-1 rounded bg-[#111] text-white text-ds-body font-medium w-max"
+        style={{ ...pos, opacity: visible ? 1 : 0, transform: visible ? pos.enter : pos.exit, transition: "opacity 150ms, transform 150ms" }}>
+        {content}
+      </span>
+    </span>
+  );
+}`}
+          >
+            <TooltipDemo />
+          </ComponentSection>
+
+          {/* ── TextInput ── */}
+          <ComponentSection
+            name="TextInput"
+            description="Pill-shaped text field. Border darkens on focus. Fully accessible via label/htmlFor pairing."
+            code={`"use client";
+
+export function TextInput({ label, id, ...props }) {
+  const inputId = id ?? label.toLowerCase().replace(/\\s+/g, "-");
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <label htmlFor={inputId} className="text-ds-body font-medium text-black">
+        {label}
+      </label>
+      <input
+        id={inputId}
+        className="w-full rounded-full px-4 py-3 border-[1.5px] border-black/12
+          text-ds-body font-medium outline-none transition-colors duration-150
+          focus:border-black/30 placeholder:text-ds-neutral-500"
+        {...props}
+      />
+    </div>
+  );
+}`}
+          >
+            <div className="w-full max-w-sm flex flex-col gap-4">
+              <TextInput label="Full name" placeholder="Vedant Lad" />
+              <TextInput label="Email" type="email" placeholder="hello@example.com" />
+            </div>
+          </ComponentSection>
+
+          {/* ── Textarea ── */}
+          <ComponentSection
+            name="Textarea"
+            description="Resizable multi-line input. Supports an optional label suffix."
+            code={`"use client";
+
+export function Textarea({ label, optional, id, ...props }) {
+  const inputId = id ?? label.toLowerCase().replace(/\\s+/g, "-");
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <label htmlFor={inputId} className="text-ds-body font-medium text-black">
+        {label}
+        {optional && <span className="ml-2 text-[14px] font-normal text-ds-neutral-500">Optional</span>}
+      </label>
+      <textarea
+        id={inputId}
+        rows={4}
+        className="w-full rounded-2xl px-4 py-3 border-[1.5px] border-black/12
+          text-ds-body font-medium outline-none resize-y transition-colors duration-150
+          focus:border-black/30 placeholder:text-ds-neutral-500"
+        {...props}
+      />
+    </div>
+  );
+}`}
+          >
+            <div className="w-full max-w-sm">
+              <Textarea label="Message" optional placeholder="Tell me about your project…" />
+            </div>
+          </ComponentSection>
+
+          {/* ── Checkbox ── */}
+          <ComponentSection
+            name="Checkbox"
+            description="Custom checkbox with a blur+scale checkmark animation driven by CSS [data-checked]. No JS animation library needed."
+            code={`"use client";
+
+export function Checkbox({ label, description, defaultChecked = false, onChange }) {
+  const [checked, setChecked] = useState(defaultChecked);
+  const id = useId();
+  return (
+    <label htmlFor={id} className="flex items-start gap-3 cursor-pointer group">
+      <input id={id} type="checkbox" checked={checked} onChange={() => { const n = !checked; setChecked(n); onChange?.(n); }} className="sr-only" />
+      <div data-checked={checked}
+        className="w-[18px] h-[18px] rounded-[5px] border flex items-center justify-center shrink-0 mt-[3px]
+          transition-[background-color,border-color] duration-150"
+        style={{ background: checked ? "#000" : "#fff", borderColor: checked ? "#000" : "rgba(0,0,0,0.2)" }}>
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none" className="checkmark-svg">
+          <path d="M1.5 4L3.5 6L8.5 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+      <div>
+        <span className="text-ds-body font-medium">{label}</span>
+        {description && <p className="text-ds-body text-ds-neutral-600">{description}</p>}
+      </div>
+    </label>
+  );
+}
+
+/* globals.css */
+.checkmark-svg { opacity: 0; transform: scale(0.25); filter: blur(4px); transition: opacity 150ms, transform 150ms, filter 150ms; }
+[data-checked="true"] .checkmark-svg { opacity: 1; transform: scale(1); filter: blur(0); }`}
+          >
+            <div className="flex flex-col gap-4">
+              <Checkbox label="Send me product updates" defaultChecked />
+              <Checkbox label="Enable notifications" description="We'll notify you about important activity." />
+              <Checkbox label="Agree to terms of service" />
+            </div>
+          </ComponentSection>
+
+          {/* ── Toggle ── */}
+          <ComponentSection
+            name="Toggle"
+            description="Switch control with a sliding thumb. The thumb translates 16px; background and border transition simultaneously."
+            code={`"use client";
+
+export function Toggle({ label, description, defaultChecked = false, onChange }) {
+  const [checked, setChecked] = useState(defaultChecked);
+  const id = useId();
+  return (
+    <div className="flex items-start gap-3">
+      <button id={id} role="switch" aria-checked={checked} onClick={() => { const n = !checked; setChecked(n); onChange?.(n); }}
+        className="relative w-10 h-6 rounded-full border-[1.5px] active:scale-[0.96]"
+        style={{ background: checked ? "#000" : "#fff", borderColor: checked ? "transparent" : "rgba(0,0,0,0.2)",
+          transition: "background-color 150ms cubic-bezier(0.23,1,0.32,1), border-color 150ms cubic-bezier(0.23,1,0.32,1), scale 150ms cubic-bezier(0.23,1,0.32,1)" }}>
+        <span className="absolute top-[3px] left-[3px] w-4 h-4 rounded-full"
+          style={{ background: checked ? "#fff" : "#c8c8c8",
+            transform: checked ? "translateX(16px)" : "translateX(0)",
+            transition: "transform 200ms cubic-bezier(0.23,1,0.32,1), background-color 150ms cubic-bezier(0.23,1,0.32,1)" }} />
+      </button>
+      <label htmlFor={id} className="flex flex-col gap-0.5 cursor-pointer" onClick={() => checked ? false : true}>
+        <span className="text-ds-body font-medium">{label}</span>
+        {description && <span className="text-ds-body text-ds-neutral-600">{description}</span>}
+      </label>
+    </div>
+  );
+}`}
+          >
+            <div className="flex flex-col gap-4">
+              <Toggle label="Dark mode" defaultChecked />
+              <Toggle label="Email notifications" description="Receive updates about your account." />
+              <Toggle label="Analytics tracking" description="Help us improve the product." defaultChecked />
+            </div>
+          </ComponentSection>
+
+          {/* ── RadioGroup ── */}
+          <ComponentSection
+            name="RadioGroup"
+            description="Accessible radio group with a custom indicator. The radio dot uses the same blur+scale animation as Checkbox."
+            code={`"use client";
+
+export function RadioGroup({ label, options, defaultValue = "", onChange }) {
+  const [selected, setSelected] = useState(defaultValue);
+  const name = useId();
+  return (
+    <div className="flex flex-col gap-3">
+      <p className="text-ds-body font-medium">{label}</p>
+      {options.map((opt) => {
+        const isSelected = selected === opt.value;
+        return (
+          <label key={opt.value} className="flex items-start gap-3 cursor-pointer group">
+            <input type="radio" name={name} value={opt.value} checked={isSelected}
+              onChange={() => { setSelected(opt.value); onChange?.(opt.value); }} className="sr-only" />
+            <div data-checked={isSelected}
+              className="w-[18px] h-[18px] rounded-full border flex items-center justify-center shrink-0 mt-[3px]"
+              style={{ borderColor: isSelected ? "#000" : "rgba(0,0,0,0.2)" }}>
+              <div className="radio-dot w-2.5 h-2.5 rounded-full bg-black" />
+            </div>
+            <div>
+              <span className="text-ds-body font-medium">{opt.label}</span>
+              {opt.description && <p className="text-ds-body text-ds-neutral-600">{opt.description}</p>}
+            </div>
+          </label>
+        );
+      })}
+    </div>
+  );
+}
+
+/* globals.css */
+.radio-dot { opacity: 0; transform: scale(0.25); filter: blur(4px); transition: opacity 150ms, transform 150ms, filter 150ms; }
+[data-checked="true"] .radio-dot { opacity: 1; transform: scale(1); filter: blur(0); }`}
+          >
+            <div className="w-full max-w-xs">
+              <RadioGroup
+                label="Notification frequency"
+                defaultValue="daily"
+                options={[
+                  { value: "realtime", label: "Real-time",  description: "Get notified immediately." },
+                  { value: "daily",    label: "Daily digest", description: "One email per day." },
+                  { value: "weekly",   label: "Weekly summary", description: "One email per week." },
+                ]}
+              />
+            </div>
           </ComponentSection>
 
         </section>
