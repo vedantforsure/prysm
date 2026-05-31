@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import Hero from "./components/Hero";
 import ProjectCard from "./components/ProjectCard";
+import RevealSection from "./components/RevealSection";
 import SecondaryButton from "./components/SecondaryButton";
 
 export default function Home() {
@@ -10,7 +11,7 @@ export default function Home() {
   return (
     <main className="flex flex-1 flex-col bg-white">
       <Hero />
-      <section className="w-full px-4 py-[24px] sm:px-0 sm:py-[60px]">
+      <RevealSection className="w-full px-4 py-[24px] sm:px-0 sm:py-[60px]">
         <div className="mx-auto max-w-[700px] flex flex-col gap-5">
           <span
             className="text-display sm:![font-size:44px] self-start"
@@ -65,14 +66,14 @@ export default function Home() {
           />
           </div>
         </div>
-      </section>
-      <section className="w-full px-4 py-[60px] sm:px-0 sm:py-[120px]">
+      </RevealSection>
+      <RevealSection className="w-full px-4 py-[60px] sm:px-0 sm:py-[120px]">
         <div className="mx-auto flex max-w-[700px] flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
           <SecondaryButton className="!h-[66px] !px-6 !text-[24px] w-full sm:w-auto">AI experiments</SecondaryButton>
           <SecondaryButton className="!h-[66px] !px-6 !text-[24px] w-full sm:w-auto">LinkedIn</SecondaryButton>
           <SecondaryButton className="!h-[66px] !px-6 !text-[24px] w-full sm:w-auto">X</SecondaryButton>
         </div>
-      </section>
+      </RevealSection>
     </main>
   );
 }

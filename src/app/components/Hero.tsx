@@ -16,7 +16,7 @@ export default function Hero() {
           >
             Vedant{" "}
           </span>
-          <span className="text-body hero-fade hero-fade-2">
+          <span className="text-body hero-fade hero-fade-3">
             is a product designer crafting software at the intersection of design and code, driven by taste and an obsession with form and function.
           </span>
         </p>

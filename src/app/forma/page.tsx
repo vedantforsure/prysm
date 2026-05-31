@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+
+const PAGE_LOAD_TIME = Date.now();
+const HERO_DONE_MS = 550; // content starts as hero elements are settling
+
 // ─── Tree data ────────────────────────────────────────────────────────────────
 
 const TREE = [
@@ -171,7 +175,7 @@ function ComponentTree() {
   const btnStyle = { WebkitTapHighlightColor: "transparent" as const, touchAction: "manipulation" as const };
 
   return (
-    <nav className="hidden lg:flex fixed bottom-6 left-6 z-50 flex-col gap-0.5 hero-fade hero-fade-2">
+    <nav className="hidden lg:flex fixed bottom-6 left-6 z-50 flex-col gap-0.5 hero-fade hero-fade-4">
       <div className="flex flex-col gap-0.5">
         {TREE.map(({ category, components }) => {
           const isOpen = openCategory === category;
@@ -493,6 +497,27 @@ function ComponentSection({ name, description, code, children, overflowPreview, 
   const [showCode, setShowCode] = useState(false);
   const codeRef = useRef<HTMLPreElement>(null);
   const [copied, setCopied] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    let timeout: ReturnType<typeof setTimeout>;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const elapsed = Date.now() - PAGE_LOAD_TIME;
+          const wait = Math.max(0, HERO_DONE_MS - elapsed);
+          timeout = setTimeout(() => setVisible(true), wait);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.05, rootMargin: "0px 0px -40px 0px" }
+    );
+    observer.observe(el);
+    return () => { observer.disconnect(); clearTimeout(timeout); };
+  }, []);
 
   function copy() {
     navigator.clipboard.writeText(code);
@@ -501,7 +526,19 @@ function ComponentSection({ name, description, code, children, overflowPreview, 
   }
 
   return (
-    <div id={id} className="flex flex-col gap-3 scroll-mt-8">
+    <div
+      ref={sectionRef}
+      id={id}
+      className="flex flex-col gap-3 scroll-mt-8"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(16px)",
+        filter: visible ? "blur(0px)" : "blur(6px)",
+        transition: visible
+          ? "opacity 300ms cubic-bezier(0.23,1,0.32,1), transform 300ms cubic-bezier(0.23,1,0.32,1), filter 300ms cubic-bezier(0.23,1,0.32,1)"
+          : "none",
+      }}
+    >
       {/* Label */}
       <div className="flex flex-col gap-1">
         <p className="text-body" style={{ color: "#000000" }}>{name}</p>
@@ -627,7 +664,7 @@ export default function FormaPage() {
   return (
     <main className="flex flex-1 flex-col bg-white">
       {/* Back link — fixed top-left, above scroll mask */}
-      <div className="fixed top-5 left-5 z-50 hero-fade hero-fade-1">
+      <div className="fixed top-5 left-5 z-50 hero-fade hero-fade-2">
         <Link
           href="/"
           className="select-none inline-flex h-11 items-center gap-1.5 rounded-full px-4 text-body transition-[background-color,transform] duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] hover:bg-[#eeeeee] active:scale-[0.96] active:bg-[#bbbbbb]"
@@ -664,7 +701,7 @@ export default function FormaPage() {
           >
             Forma
           </h1>
-          <p className="text-body hero-fade hero-fade-2" style={{ maxWidth: "520px" }}>
+          <p className="text-body hero-fade hero-fade-3" style={{ maxWidth: "520px" }}>
             A minimal, opinionated design system for React apps. Every component is built with the same easing, timing, and interaction model — so your UI feels coherent without extra effort.
           </p>
         </section>
