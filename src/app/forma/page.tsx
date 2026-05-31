@@ -205,11 +205,10 @@ function ComponentTree() {
                           const id = name.toLowerCase().replace(/\s+/g, "-");
                           document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
                         }}
-                        className={btnBase}
+                        className={`${btnBase}${activeComponent === name ? " bg-black/[0.06]" : ""}`}
                         style={{
                           ...btnStyle,
                           color: activeComponent === name ? "#000000" : "#666666",
-                          background: activeComponent === name ? "rgba(0,0,0,0.06)" : "transparent",
                           opacity: isOpen ? 1 : 0,
                           transform: isOpen ? "translateY(0)" : "translateY(4px)",
                           transition: "opacity 150ms cubic-bezier(0.23,1,0.32,1), transform 150ms cubic-bezier(0.23,1,0.32,1), color 150ms cubic-bezier(0.23,1,0.32,1), background-color 150ms cubic-bezier(0.23,1,0.32,1), scale 150ms cubic-bezier(0.23,1,0.32,1)",
@@ -325,6 +324,79 @@ const TOOLTIP_TRIGGERS = [
   { side: "left",   label: "API key",  content: "Keep this secret — it grants full account access" },
 ] as const;
 
+function TextInputSection() {
+  const [activeState, setActiveState] = useState<"error" | "success" | "disabled" | "loading" | null>(null);
+
+  const chipBase = "select-none inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-sans font-medium text-ds-body whitespace-nowrap border transition-[background-color,scale] duration-150 ease-ds active:scale-[0.96] cursor-pointer";
+  const chipOff = "bg-white border-black/16 text-black hfine:hover:bg-ds-neutral-100 active:bg-ds-neutral-400";
+  const chipOn  = "bg-[#0088ff] border-[#0088ff] text-white";
+
+  const stateChips = (
+    <>
+      {(["error", "success", "disabled", "loading"] as const).map((s) => (
+        <button
+          key={s}
+          onClick={() => setActiveState(activeState === s ? null : s)}
+          className={`${chipBase} ${activeState === s ? chipOn : chipOff}`}
+        >
+          {s.charAt(0).toUpperCase() + s.slice(1)}
+        </button>
+      ))}
+    </>
+  );
+
+  return (
+    <ComponentSection
+      name="TextInput"
+      description="Pill-shaped text field. Border darkens on focus. Fully accessible via label/htmlFor pairing."
+      code={`"use client";
+
+export function TextInput({ label, id, ...props }) {
+  const inputId = id ?? label.toLowerCase().replace(/\\s+/g, "-");
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <label htmlFor={inputId} className="text-ds-body font-medium text-black">
+        {label}
+      </label>
+      <input
+        id={inputId}
+        className="w-full rounded-full px-4 py-2 border-[1.5px] border-black/12
+          text-ds-body font-medium outline-none transition-colors duration-150
+          focus:border-blue-500 placeholder:text-ds-neutral-500"
+        {...props}
+      />
+    </div>
+  );
+}`}
+    >
+      <div className="w-full flex flex-col items-center gap-8">
+        <div className="w-full max-w-sm flex flex-col gap-4">
+          <TextInput
+            label="Full name"
+            placeholder="Vedant Lad"
+            error={activeState === "error" ? "This field is required." : undefined}
+            success={activeState === "success"}
+            disabled={activeState === "disabled"}
+            loading={activeState === "loading"}
+          />
+          <TextInput
+            label="Email"
+            type="email"
+            placeholder="hello@example.com"
+            error={activeState === "error" ? "Enter a valid email address." : undefined}
+            success={activeState === "success"}
+            disabled={activeState === "disabled"}
+            loading={activeState === "loading"}
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          {stateChips}
+        </div>
+      </div>
+    </ComponentSection>
+  );
+}
+
 function TooltipDemo() {
   return (
     <div className="flex items-center gap-6 py-8">
@@ -410,11 +482,12 @@ interface ComponentSectionProps {
   code: string;
   children: React.ReactNode;
   overflowPreview?: boolean;
+  controls?: React.ReactNode;
 }
 
 // ─── ComponentSection ─────────────────────────────────────────────────────────
 
-function ComponentSection({ name, description, code, children, overflowPreview }: ComponentSectionProps) {
+function ComponentSection({ name, description, code, children, overflowPreview, controls }: ComponentSectionProps) {
   const id = name.toLowerCase().replace(/\s+/g, "-");
   const [dark, setDark] = useState(false);
   const [showCode, setShowCode] = useState(false);
@@ -486,6 +559,13 @@ function ComponentSection({ name, description, code, children, overflowPreview }
             Code
           </button>
         </div>
+
+        {/* Controls row */}
+        {controls && (
+          <div className="flex items-center justify-end gap-2 px-4 pb-3">
+            {controls}
+          </div>
+        )}
 
         {/* Component preview */}
         <div className={`flex items-center justify-center flex-wrap gap-4 px-6 py-10 sm:py-14${dark ? " dark" : ""}`}>
@@ -1624,34 +1704,7 @@ export function Tooltip({ content, side = "top", children }) {
           </ComponentSection>
 
           {/* ── TextInput ── */}
-          <ComponentSection
-            name="TextInput"
-            description="Pill-shaped text field. Border darkens on focus. Fully accessible via label/htmlFor pairing."
-            code={`"use client";
-
-export function TextInput({ label, id, ...props }) {
-  const inputId = id ?? label.toLowerCase().replace(/\\s+/g, "-");
-  return (
-    <div className="flex flex-col gap-2 w-full">
-      <label htmlFor={inputId} className="text-ds-body font-medium text-black">
-        {label}
-      </label>
-      <input
-        id={inputId}
-        className="w-full rounded-full px-4 py-3 border-[1.5px] border-black/12
-          text-ds-body font-medium outline-none transition-colors duration-150
-          focus:border-black/30 placeholder:text-ds-neutral-500"
-        {...props}
-      />
-    </div>
-  );
-}`}
-          >
-            <div className="w-full max-w-sm flex flex-col gap-4">
-              <TextInput label="Full name" placeholder="Vedant Lad" />
-              <TextInput label="Email" type="email" placeholder="hello@example.com" />
-            </div>
-          </ComponentSection>
+          <TextInputSection />
 
           {/* ── Textarea ── */}
           <ComponentSection

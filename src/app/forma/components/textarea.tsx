@@ -28,7 +28,7 @@ export function Textarea({ label, optional, className, id, ...props }: TextareaP
           "placeholder:font-normal placeholder:text-ds-neutral-500 dark:placeholder:text-ds-neutral-600",
           "bg-white dark:bg-ds-neutral-950",
           "outline-none resize-y transition-colors duration-150",
-          "focus:border-black/30 dark:focus:border-white/30",
+          "focus:border-blue-500 dark:focus:border-blue-400",
           className,
         )}
         {...props}
