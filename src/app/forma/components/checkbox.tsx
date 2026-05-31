@@ -33,7 +33,15 @@ export function Checkbox({ label, description, defaultChecked = false, onChange 
             : "bg-white dark:bg-ds-neutral-950 border-black/20 dark:border-white/20 hfine:group-hover:border-black/40 dark:hfine:group-hover:border-white/40",
         ].join(" ")}
       >
-        <svg width="10" height="8" viewBox="0 0 10 8" fill="none" className="checkmark-svg">
+        <svg
+          width="10" height="8" viewBox="0 0 10 8" fill="none"
+          style={{
+            opacity:    checked ? 1 : 0,
+            transform:  checked ? "scale(1)" : "scale(0.25)",
+            filter:     checked ? "blur(0px)" : "blur(4px)",
+            transition: "opacity 150ms cubic-bezier(0.23,1,0.32,1), transform 150ms cubic-bezier(0.23,1,0.32,1), filter 150ms cubic-bezier(0.23,1,0.32,1)",
+          }}
+        >
           <path
             d="M1.5 4L3.5 6L8.5 1"
             className="stroke-white dark:stroke-ds-neutral-1000"

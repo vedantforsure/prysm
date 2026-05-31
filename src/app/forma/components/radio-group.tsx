@@ -44,7 +44,15 @@ export function RadioGroup({ label, options, defaultValue = "", onChange }: Radi
                     : "bg-white dark:bg-ds-neutral-950 border-black/20 dark:border-white/20 hfine:group-hover:border-black/40 dark:hfine:group-hover:border-white/40",
                 ].join(" ")}
               >
-                <div className="radio-dot w-2.5 h-2.5 rounded-full bg-ds-neutral-1000 dark:bg-ds-neutral-0" />
+                <div
+                  className="w-2.5 h-2.5 rounded-full bg-ds-neutral-1000 dark:bg-ds-neutral-0"
+                  style={{
+                    opacity:    isSelected ? 1 : 0,
+                    transform:  isSelected ? "scale(1)" : "scale(0.25)",
+                    filter:     isSelected ? "blur(0px)" : "blur(4px)",
+                    transition: "opacity 150ms cubic-bezier(0.23,1,0.32,1), transform 150ms cubic-bezier(0.23,1,0.32,1), filter 150ms cubic-bezier(0.23,1,0.32,1)",
+                  }}
+                />
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-ds-body font-medium text-ds-neutral-1000 dark:text-ds-neutral-0">{opt.label}</span>
