@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "@fontsource/nunito/800.css";
 import Navbar from "./components/Navbar";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ export default function RootLayout({
         </svg>
         <Navbar />
         {children}
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );

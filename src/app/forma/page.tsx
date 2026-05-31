@@ -14,12 +14,16 @@ const TREE = [
     components: ["PrimaryButton", "SecondaryButton", "GhostButton", "DestructiveButton", "IconButton"],
   },
   {
-    category: "Display",
-    components: ["ProjectCard", "Badge"],
+    category: "Feedback",
+    components: ["Toast", "Alert", "Badge"],
   },
   {
-    category: "Inputs",
-    components: ["TextInput"],
+    category: "Navigation",
+    components: ["Tabs", "Breadcrumb", "SegmentedControl"],
+  },
+  {
+    category: "Data Display",
+    components: ["Table", "Avatar", "Tag"],
   },
 ];
 
@@ -87,6 +91,15 @@ import { DestructiveButton } from "./components/destructive-button";
 import { IconButton } from "./components/icon-button";
 import { ColorSwatch } from "./components/color-swatch";
 import { MotionSwatch } from "./components/motion-swatch";
+import { ToastDemo } from "./components/toast-demo";
+import { Alert } from "./components/alert";
+import { Badge } from "./components/badge";
+import { Tabs } from "./components/tabs";
+import { Breadcrumb } from "./components/breadcrumb";
+import { SegmentedControl } from "./components/segmented-control";
+import { Table } from "./components/table";
+import { Avatar } from "./components/avatar";
+import { Tag } from "./components/tag";
 
 function ComponentTree() {
   const [openCategory, setOpenCategory] = useState<string>("");
@@ -198,6 +211,31 @@ function ComponentTree() {
         })}
       </div>
     </nav>
+  );
+}
+
+// ─── Tag demo data ────────────────────────────────────────────────────────────
+
+const INITIAL_TAGS = ["Design", "Engineering", "Motion", "Tokens", "React"];
+
+function TagDemo() {
+  const [tags, setTags] = useState(INITIAL_TAGS);
+  const [removing, setRemoving] = useState<string | null>(null);
+
+  function remove(label: string) {
+    setRemoving(label);
+    setTimeout(() => {
+      setTags((t) => t.filter((x) => x !== label));
+      setRemoving(null);
+    }, 180);
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {tags.map((t) => (
+        <Tag key={t} label={t} onRemove={() => remove(t)} removing={removing === t} />
+      ))}
+    </div>
   );
 }
 
@@ -816,6 +854,446 @@ export function IconButton({
           >
             <IconButton label="Add" />
           </ComponentSection>
+
+          {/* ── Toast ── */}
+          <ComponentSection
+            name="Toast"
+            description="Ephemeral notifications powered by Sonner. Five variants — click each trigger to fire. Toasts auto-dismiss after 4 seconds."
+            code={`"use client";
+
+import { toast } from "sonner";
+import { Toaster } from "sonner"; // mount once in layout.tsx
+
+const variants = [
+  { label: "Default",  action: () => toast("Event has been created.") },
+  { label: "Success",  action: () => toast.success("Changes saved.") },
+  { label: "Error",    action: () => toast.error("Something went wrong.") },
+  { label: "Warning",  action: () => toast.warning("This action is irreversible.") },
+  { label: "Promise",  action: () => toast.promise(
+      new Promise(r => setTimeout(r, 2000)),
+      { loading: "Saving…", success: "Saved!", error: "Failed." }
+    )
+  },
+];
+
+export function ToastDemo() {
+  return (
+    <div className="flex flex-wrap gap-3">
+      {variants.map(({ label, action }) => (
+        <button key={label} onClick={action}
+          className="rounded-full px-4 py-[10px] border border-black/16 text-ds-body font-medium">
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}`}
+          >
+            <ToastDemo />
+          </ComponentSection>
+
+          {/* ── Alert ── */}
+          <ComponentSection
+            name="Alert"
+            description="Four semantic variants for inline status messages. Use for form errors, confirmations, and warnings — not for toasts."
+            code={`import { cn } from "@/lib/utils";
+
+type AlertVariant = "info" | "success" | "warning" | "error";
+
+interface AlertProps {
+  variant: AlertVariant;
+  title: string;
+  description?: string;
+}
+
+export function Alert({ variant, title, description }: AlertProps) {
+  return (
+    <div
+      role="alert"
+      className={cn("rounded-xl border px-5 py-4 flex flex-col gap-1")}
+      style={{
+        backgroundColor: \`var(--alert-\${variant}-bg)\`,
+        borderColor:     \`var(--alert-\${variant}-border)\`,
+        color:           \`var(--alert-\${variant}-text)\`,
+      }}
+    >
+      <span className="text-ds-body font-medium">{title}</span>
+      {description && (
+        <span className="text-ds-body font-medium opacity-80">{description}</span>
+      )}
+    </div>
+  );
+}`}
+          >
+            <div className="w-full flex flex-col gap-3">
+              <Alert variant="info"    title="Update available"  description="A new version is ready. Refresh to apply." />
+              <Alert variant="success" title="Changes saved"     description="Your profile has been updated successfully." />
+              <Alert variant="warning" title="Almost at limit"   description="You've used 90% of your storage quota." />
+              <Alert variant="error"   title="Payment failed"    description="Check your card details and try again." />
+            </div>
+          </ComponentSection>
+
+          {/* ── Badge ── */}
+          <ComponentSection
+            name="Badge"
+            description="Compact status labels. Use to tag items with a state — not as interactive controls."
+            code={`import { cn } from "@/lib/utils";
+
+type BadgeVariant = "neutral" | "info" | "success" | "warning" | "error";
+
+interface BadgeProps {
+  variant?: BadgeVariant;
+  label: string;
+  dot?: boolean;
+}
+
+export function Badge({ variant = "neutral", label, dot = false }: BadgeProps) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-[6px] px-2 py-[3px] rounded-full border",
+        "text-ds-body font-medium whitespace-nowrap",
+      )}
+      style={{
+        backgroundColor: \`var(--alert-\${variant}-bg)\`,
+        borderColor:     \`var(--alert-\${variant}-border)\`,
+        color:           \`var(--alert-\${variant}-text)\`,
+      }}
+    >
+      {dot && <span className="size-[6px] rounded-full bg-current shrink-0" />}
+      {label}
+    </span>
+  );
+}`}
+          >
+            <div className="flex flex-wrap gap-3">
+              <Badge variant="neutral" label="Neutral" dot />
+              <Badge variant="info"    label="Info"    dot />
+              <Badge variant="success" label="Success" dot />
+              <Badge variant="warning" label="Warning" dot />
+              <Badge variant="error"   label="Error"   dot />
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Badge variant="neutral" label="Neutral" />
+              <Badge variant="info"    label="Info" />
+              <Badge variant="success" label="Success" />
+              <Badge variant="warning" label="Warning" />
+              <Badge variant="error"   label="Error" />
+            </div>
+          </ComponentSection>
+
+          {/* ── Tabs ── */}
+          <ComponentSection
+            name="Tabs"
+            description="Sliding underline indicator that animates between tab stops. The indicator position is measured from the DOM — no hardcoded offsets."
+            code={`"use client";
+
+import { useState, useRef, useEffect } from "react";
+
+export function Tabs({ tabs, defaultValue, onChange }) {
+  const [active, setActive] = useState(defaultValue ?? tabs[0]?.value);
+  const tabRefs = useRef([]);
+  const [indicator, setIndicator] = useState({ left: 0, width: 0, ready: false });
+
+  useEffect(() => {
+    const idx = tabs.findIndex((t) => t.value === active);
+    const el = tabRefs.current[idx];
+    if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth, ready: true });
+  }, [active, tabs]);
+
+  return (
+    <div className="w-full">
+      <div className="relative flex items-end">
+        <div
+          className="absolute bottom-0 h-[1.5px] bg-black rounded-full"
+          style={{
+            left: indicator.left,
+            width: indicator.width,
+            opacity: indicator.ready ? 1 : 0,
+            transition: indicator.ready
+              ? "left 150ms cubic-bezier(0.23,1,0.32,1), width 150ms cubic-bezier(0.23,1,0.32,1)"
+              : "none",
+          }}
+        />
+        {tabs.map((tab, i) => (
+          <button
+            key={tab.value}
+            ref={(el) => { tabRefs.current[i] = el; }}
+            onClick={() => { setActive(tab.value); onChange?.(tab.value); }}
+            className="px-3 pb-2 text-ds-body font-medium transition-colors duration-150"
+            style={{ color: active === tab.value ? "#000" : "#999" }}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <div className="h-px bg-neutral-100" />
+    </div>
+  );
+}`}
+          >
+            <div className="w-full">
+              <Tabs
+                tabs={[
+                  { label: "Overview", value: "overview" },
+                  { label: "Components", value: "components" },
+                  { label: "Tokens", value: "tokens" },
+                  { label: "Changelog", value: "changelog" },
+                ]}
+              />
+            </div>
+          </ComponentSection>
+
+          {/* ── Breadcrumb ── */}
+          <ComponentSection
+            name="Breadcrumb"
+            description="Hierarchical path navigation. Last item is the current page — always non-interactive."
+            code={`export function Breadcrumb({ items }) {
+  return (
+    <nav aria-label="Breadcrumb" className="flex items-center">
+      {items.map((item, i) => {
+        const isLast = i === items.length - 1;
+        return (
+          <span key={i} className="flex items-center">
+            {isLast ? (
+              <span aria-current="page" className="text-ds-body font-medium text-black">
+                {item.label}
+              </span>
+            ) : (
+              <a href={item.href ?? "#"} className="text-ds-body font-medium text-ds-neutral-450">
+                {item.label}
+              </a>
+            )}
+            {!isLast && (
+              <span aria-hidden className="mx-[6px] text-ds-body text-ds-neutral-300 select-none">
+                /
+              </span>
+            )}
+          </span>
+        );
+      })}
+    </nav>
+  );
+}`}
+          >
+            <Breadcrumb
+              items={[
+                { label: "Home", href: "#" },
+                { label: "Design System", href: "#" },
+                { label: "Components", href: "#" },
+                { label: "Breadcrumb" },
+              ]}
+            />
+          </ComponentSection>
+
+          {/* ── SegmentedControl ── */}
+          <ComponentSection
+            name="SegmentedControl"
+            description="A pill-track switcher with a sliding active indicator. Use for mutually exclusive view modes."
+            code={`"use client";
+
+import { useState, useRef, useLayoutEffect } from "react";
+
+export function SegmentedControl({ segments, defaultValue, onChange }) {
+  const [selected, setSelected] = useState(defaultValue ?? segments[0]?.value);
+  const [pillStyle, setPillStyle] = useState(null);
+  const segmentRefs = useRef(new Map());
+
+  useLayoutEffect(() => {
+    const el = segmentRefs.current.get(selected);
+    if (el) setPillStyle({ left: el.offsetLeft, width: el.offsetWidth });
+  }, [selected]);
+
+  return (
+    <div className="relative flex items-center self-start p-1 rounded-full bg-ds-neutral-100 border border-black/8">
+      {pillStyle && (
+        <div
+          aria-hidden
+          className="absolute top-1 bottom-1 rounded-full bg-black pointer-events-none"
+          style={{
+            left: pillStyle.left,
+            width: pillStyle.width,
+            transition: "left 200ms cubic-bezier(0.23,1,0.32,1), width 200ms cubic-bezier(0.23,1,0.32,1)",
+          }}
+        />
+      )}
+      {segments.map((seg) => (
+        <button
+          key={seg.value}
+          ref={(el) => { if (el) segmentRefs.current.set(seg.value, el); }}
+          onClick={() => { setSelected(seg.value); onChange?.(seg.value); }}
+          className="relative z-10 px-4 py-2 rounded-full text-ds-body font-medium"
+          style={{ color: selected === seg.value ? "#fff" : "#666" }}
+        >
+          {seg.label}
+        </button>
+      ))}
+    </div>
+  );
+}`}
+          >
+            <SegmentedControl
+              segments={[
+                { value: "day",   label: "Day"   },
+                { value: "week",  label: "Week"  },
+                { value: "month", label: "Month" },
+              ]}
+            />
+          </ComponentSection>
+
+          {/* ── Table ── */}
+          <ComponentSection
+            name="Table"
+            description="Sortable data table. Click any column header to sort ascending or descending."
+            code={`"use client";
+
+import { useState } from "react";
+
+export function Table({ columns, rows }) {
+  const [sortKey, setSortKey] = useState(null);
+  const [sortDir, setSortDir] = useState("asc");
+
+  function handleSort(key) {
+    if (sortKey === key) setSortDir((d) => d === "asc" ? "desc" : "asc");
+    else { setSortKey(key); setSortDir("asc"); }
+  }
+
+  const sorted = sortKey
+    ? [...rows].sort((a, b) => {
+        const [av, bv] = [String(a[sortKey]), String(b[sortKey])];
+        return sortDir === "asc" ? av.localeCompare(bv) : bv.localeCompare(av);
+      })
+    : rows;
+
+  return (
+    <div className="w-full overflow-x-auto">
+      <table className="w-full border-collapse">
+        <thead>
+          <tr className="border-b border-black/8">
+            {columns.map((col) => (
+              <th key={col.key} onClick={() => handleSort(col.key)}
+                className="pb-3 pr-8 last:pr-0 text-left cursor-pointer text-ds-body font-medium">
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-black/6">
+          {sorted.map((row, i) => (
+            <tr key={i}>
+              {columns.map((col) => (
+                <td key={col.key} className="py-3 pr-8 last:pr-0 text-ds-body font-medium text-ds-neutral-600">
+                  {col.render ? col.render(row[col.key], row) : String(row[col.key] ?? "")}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}`}
+          >
+            <Table
+              columns={[
+                { key: "name",   label: "Component" },
+                { key: "status", label: "Status" },
+                { key: "type",   label: "Type" },
+              ]}
+              rows={[
+                { name: "PrimaryButton",    status: "Stable",      type: "Action"    },
+                { name: "Alert",            status: "Stable",      type: "Feedback"  },
+                { name: "Tabs",             status: "Stable",      type: "Navigation"},
+                { name: "Table",            status: "Stable",      type: "Display"   },
+                { name: "SegmentedControl", status: "Stable",      type: "Navigation"},
+              ]}
+            />
+          </ComponentSection>
+
+          {/* ── Avatar ── */}
+          <ComponentSection
+            name="Avatar"
+            description="Three sizes with image or initials fallback. The fallback renders the first two characters of the provided string."
+            code={`import { cn } from "@/lib/utils";
+
+const sizeMap = {
+  sm: { wh: "w-6 h-6",   text: "text-[10px]" },
+  md: { wh: "w-8 h-8",   text: "text-[12px]" },
+  lg: { wh: "w-10 h-10", text: "text-[14px]" },
+};
+
+export function Avatar({ src, alt, fallback, size = "md" }) {
+  const s = sizeMap[size];
+  return (
+    <div className={cn(
+      "rounded-full overflow-hidden bg-ds-neutral-100 flex items-center justify-center",
+      s.wh,
+    )}>
+      {src ? (
+        <img src={src} alt={alt ?? ""} className="w-full h-full object-cover" />
+      ) : (
+        <span className={cn("font-medium text-ds-neutral-600 select-none", s.text)}>
+          {(fallback ?? "?").slice(0, 2).toUpperCase()}
+        </span>
+      )}
+    </div>
+  );
+}`}
+          >
+            <div className="flex items-center gap-6">
+              <div className="flex flex-col items-center gap-2">
+                <Avatar size="sm" fallback="VL" />
+                <span className="text-ds-body text-ds-neutral-600 dark:text-ds-neutral-500">sm</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <Avatar size="md" fallback="VL" />
+                <span className="text-ds-body text-ds-neutral-600 dark:text-ds-neutral-500">md</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <Avatar size="lg" fallback="VL" />
+                <span className="text-ds-body text-ds-neutral-600 dark:text-ds-neutral-500">lg</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <Avatar size="lg" src="/x-pfp.jpg" alt="Profile" />
+                <span className="text-ds-body text-ds-neutral-600 dark:text-ds-neutral-500">image</span>
+              </div>
+            </div>
+          </ComponentSection>
+
+          {/* ── Tag ── */}
+          <ComponentSection
+            name="Tag"
+            description="Removable label chips. Tap × to dismiss — the chip shrinks out with a CSS @starting-style animation."
+            code={`"use client";
+
+export function Tag({ label, onRemove, removing = false }) {
+  const El = onRemove ? "button" : "span";
+  return (
+    <El
+      {...(onRemove ? { type: "button", onClick: onRemove } : {})}
+      className="tag-pill inline-flex items-center gap-[5px] px-[10px] py-[3px]
+        rounded-full border border-black/16 bg-white text-ds-body font-medium"
+    >
+      {label}
+      {onRemove && (
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+          <path d="M1 1l6 6M7 1L1 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      )}
+    </El>
+  );
+}
+
+/* globals.css */
+.tag-pill {
+  transition: opacity 150ms, transform 150ms, max-width 200ms;
+  @starting-style { opacity: 0; transform: scale(0.85); max-width: 0; }
+}
+.tag-pill.is-removing { opacity: 0; transform: scale(0.85); max-width: 0; }`}
+          >
+            <TagDemo />
+          </ComponentSection>
+
         </section>
       </div>
     </main>
