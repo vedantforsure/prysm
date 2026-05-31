@@ -66,9 +66,11 @@ export function Drawer({ open, onClose, side = "right", title, children }: Drawe
         style={{
           ...(isRight
             ? { top: 12, right: 12, bottom: 12, width: 360 }
-            : { bottom: 12, left: 12, right: 12, maxHeight: "60vh" }),
-          opacity:    visible ? 1 : 0,
-          transform:  visible ? "translate(0,0)" : isRight ? "translateX(calc(100% + 12px))" : "translateY(calc(100% + 12px))",
+            : { bottom: 12, left: "50%", width: 500, maxHeight: "60vh" }),
+          opacity: visible ? 1 : 0,
+          transform: isRight
+            ? (visible ? "translateX(0)" : "translateX(calc(100% + 12px))")
+            : (visible ? "translateX(-50%) translateY(0)" : "translateX(-50%) translateY(calc(100% + 12px))"),
           transition: `opacity 300ms ${EASE}, transform 300ms ${EASE}`,
         }}
       >

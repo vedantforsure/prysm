@@ -390,11 +390,12 @@ interface ComponentSectionProps {
   description: string;
   code: string;
   children: React.ReactNode;
+  overflowPreview?: boolean;
 }
 
 // ─── ComponentSection ─────────────────────────────────────────────────────────
 
-function ComponentSection({ name, description, code, children }: ComponentSectionProps) {
+function ComponentSection({ name, description, code, children, overflowPreview }: ComponentSectionProps) {
   const id = name.toLowerCase().replace(/\s+/g, "-");
   const [dark, setDark] = useState(false);
   const [showCode, setShowCode] = useState(false);
@@ -417,7 +418,7 @@ function ComponentSection({ name, description, code, children }: ComponentSectio
 
       {/* Preview box */}
       <div
-        className={`rounded-2xl overflow-hidden border ${dark ? "border-white/16" : "border-black/16"}`}
+        className={`rounded-2xl border ${overflowPreview ? "overflow-visible" : "overflow-hidden"} ${dark ? "border-white/16" : "border-black/16"}`}
         style={{
           transition: "background 200ms cubic-bezier(0.23,1,0.32,1)",
           background: dark ? "#000000" : "#ffffff",
@@ -1536,6 +1537,7 @@ export function Drawer({ open, onClose, side = "right", title, children }) {
           {/* ── Popover ── */}
           <ComponentSection
             name="Popover"
+            overflowPreview
             description="Trigger-anchored panel. Closes on outside click or Escape. Supports top, bottom, left, right with start, center, end alignment."
             code={`"use client";
 
@@ -1572,6 +1574,7 @@ export function Popover({ trigger, children, side = "bottom", align = "start" })
           {/* ── Tooltip ── */}
           <ComponentSection
             name="Tooltip"
+            overflowPreview
             description="200ms delay before appearing. Four sides. Fades and slides in from 4px offset."
             code={`"use client";
 
