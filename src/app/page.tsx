@@ -10,10 +10,10 @@ import SecondaryButton from "./components/SecondaryButton";
 export default function Home() {
   const router = useRouter();
   return (
-    <main className="flex flex-1 flex-col bg-white">
+    <main className="flex flex-1 flex-col gap-30 bg-white">
       <Hero />
-      <RevealSection className="w-full px-4 py-[24px] sm:px-0 sm:py-[60px]">
-        <div className="mx-auto max-w-[700px] flex flex-col gap-5">
+      <RevealSection className="w-full px-5 pt-30 pb-20">
+        <div className="w-full flex flex-col gap-5">
           <span
             className="text-display sm:![font-size:44px] self-start"
             style={{
@@ -28,14 +28,14 @@ export default function Home() {
           >
             Work
           </span>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <ProjectCard
             name="Forma"
             description="A minimal, opinionated design system for React apps."
             onClick={() => router.push("/forma")}
             background={
               <>
-                <img src="/card-bg.png" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ outline: "1px solid rgba(255,255,255,0.06)" }} />
+                <img src="/card-bg.png" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "50% 100%", outline: "1px solid rgba(255,255,255,0.06)" }} />
                 <img src="/scout.svg" alt="" className="absolute inset-0 m-auto w-16 h-16 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
               </>
             }
@@ -46,7 +46,7 @@ export default function Home() {
             onClick={() => router.push("/editage")}
             background={
               <>
-                <img src="/card-bg-2.png" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ outline: "1px solid rgba(255,255,255,0.06)" }} />
+                <img src="/card-bg-2.png" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "50% 100%", outline: "1px solid rgba(255,255,255,0.06)" }} />
                 <img src="/vector.svg" alt="" className="absolute inset-0 m-auto w-40 h-16 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
               </>
             }
@@ -69,8 +69,8 @@ export default function Home() {
           </div>
         </div>
       </RevealSection>
-      <RevealSection className="w-full px-4 py-[60px] sm:px-0 sm:py-[120px]">
-        <div className="mx-auto flex max-w-[700px] flex-row flex-wrap items-center justify-center gap-3">
+      <RevealSection className="w-full px-5 pt-30 pb-20">
+        <div className="mx-auto flex max-w-content flex-row flex-wrap items-center justify-center gap-3">
           <Link href="/ai-experiments"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">AI experiments</SecondaryButton></Link>
           <a href="https://www.linkedin.com/in/vedant-lad-ba322b206/" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">LinkedIn</SecondaryButton></a>
           <a href="https://x.com/Vedantdzn" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">X</SecondaryButton></a>

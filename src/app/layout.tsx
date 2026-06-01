@@ -30,6 +30,7 @@ export default function RootLayout({
             </filter>
           </defs>
         </svg>
+        <div className="w-full h-16 bg-ds-neutral-0" />
         <Navbar />
         {children}
 <Toaster position="bottom-right" />

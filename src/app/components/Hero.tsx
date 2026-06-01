@@ -1,7 +1,7 @@
 export default function Hero() {
   return (
-    <section className="w-full px-4 pt-[80px] pb-[24px] sm:px-0 sm:py-[60px]">
-      <div className="mx-auto flex max-w-[700px] flex-col items-start text-left">
+    <section className="w-full px-5 pt-30 pb-20">
+      <div className="mx-auto flex max-w-content flex-col items-start text-left">
         <p className="[text-wrap:pretty]">
           <span
             className="text-display hero-fade hero-fade-1"

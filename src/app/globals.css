@@ -115,6 +115,10 @@
   --text-ds-buttons--font-weight: 500;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Layout container widths */
+  --container-content: 800px;
+  --container-nav:     1920px;
 }
 
 @media (prefers-color-scheme: dark) {
