@@ -43,6 +43,7 @@ export default function Home() {
           <ProjectCard
             name="Editage"
             description="A collection of projects i worked on during my time at Editage."
+            onClick={() => router.push("/editage")}
             background={
               <>
                 <img src="/card-bg-2.png" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ outline: "1px solid rgba(255,255,255,0.06)" }} />

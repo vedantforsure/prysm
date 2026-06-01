@@ -12,6 +12,7 @@
     "@fontsource/nunito": "^5.2.7",
     "@fontsource/open-runde": "^5.2.1",
     "@paper-design/shaders-react": "^0.0.76",
+    "@web-kits/audio": "^0.1.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
     "geist": "^1.7.1",

@@ -1,5 +1,7 @@
 "use client";
 
+import { sounds } from "@/lib/sounds";
+
 interface ProjectCardProps {
   name: string;
   description: string;
@@ -11,6 +13,8 @@ export default function ProjectCard({ name, description, background, onClick }: 
   return (
     <div
       onClick={onClick}
+      onMouseEnter={sounds.cardHover}
+      onMouseDown={sounds.cardPress}
       className="project-card relative flex flex-col justify-end rounded-2xl bg-white cursor-pointer select-none w-full h-[320px] sm:h-[400px] overflow-hidden"
     >
       {background && (

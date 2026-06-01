@@ -96,6 +96,7 @@ const TYPE_SCALE = [
 
 // ─── Forma component imports ───────────────────────────────────────────────────
 
+import SiteSecondaryButton from "../components/SecondaryButton";
 import { PrimaryButton } from "./components/primary-button";
 import { SecondaryButton } from "./components/secondary-button";
 import { GhostButton } from "./components/ghost-button";
@@ -1904,9 +1905,9 @@ export function RadioGroup({ label, options, defaultValue = "", onChange }) {
 
       <div className="w-full px-4 py-[60px] sm:px-0 sm:py-[120px]">
         <div className="mx-auto flex max-w-[700px] flex-row flex-wrap items-center justify-center gap-3">
-          <Link href="/"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">Home</SecondaryButton></Link>
-          <a href="https://www.linkedin.com/in/vedant-lad-ba322b206/" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">LinkedIn</SecondaryButton></a>
-          <a href="https://x.com/Vedantdzn" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">X</SecondaryButton></a>
+          <Link href="/"><SiteSecondaryButton className="!h-[66px] !px-6 !text-[24px]">Home</SiteSecondaryButton></Link>
+          <a href="https://www.linkedin.com/in/vedant-lad-ba322b206/" target="_blank" rel="noopener noreferrer"><SiteSecondaryButton className="!h-[66px] !px-6 !text-[24px]">LinkedIn</SiteSecondaryButton></a>
+          <a href="https://x.com/Vedantdzn" target="_blank" rel="noopener noreferrer"><SiteSecondaryButton className="!h-[66px] !px-6 !text-[24px]">X</SiteSecondaryButton></a>
         </div>
       </div>
     </main>
