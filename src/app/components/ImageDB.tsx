@@ -125,11 +125,19 @@ export default function ImageDB() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-content flex flex-col gap-8">
+    <div className="mx-auto w-full max-w-content flex flex-col gap-6 sm:gap-8">
+      {/* ── Section header ─────────────────────────────────────── */}
+      <div className="flex flex-col gap-1">
+        <h2 className="text-ds-h1 text-ds-neutral-900">Image library</h2>
+        <p className="text-ds-small text-ds-neutral-500">
+          Save an image with the prompt you used to make it.
+        </p>
+      </div>
+
       {/* ── New entry: image left, prompt right ────────────────── */}
-      <div className="flex flex-col sm:flex-row gap-4 rounded-2xl border border-ds-neutral-200 bg-ds-neutral-50 p-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 rounded-2xl border border-ds-neutral-200 bg-ds-neutral-50 p-3 sm:p-4">
         {/* Left: image input */}
-        <div className="sm:w-1/2">
+        <div className="w-full sm:w-1/2">
           <input
             ref={fileInputRef}
             type="file"
@@ -153,7 +161,7 @@ export default function ImageDB() {
             className={`group relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl border border-dashed transition-colors ${
               dragging
                 ? "border-[#0099FF] bg-[#0099FF]/5"
-                : "border-ds-neutral-300 bg-ds-neutral-0 hover:border-ds-neutral-400"
+                : "border-ds-neutral-300 bg-ds-neutral-0 hfine:hover:border-ds-neutral-400"
             }`}
           >
             {preview ? (
@@ -164,12 +172,12 @@ export default function ImageDB() {
                   alt="Selected"
                   className="h-full w-full object-contain"
                 />
-                <span className="absolute bottom-2 right-2 rounded-full bg-black/70 px-3 py-1 text-[13px] font-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
+                <span className="text-ds-small absolute bottom-2 right-2 rounded-full bg-ds-neutral-1000/70 px-3 py-1 text-ds-neutral-0 opacity-100 transition-opacity hfine:opacity-0 hfine:group-hover:opacity-100">
                   Change
                 </span>
               </>
             ) : (
-              <span className="text-caption px-6 text-center">
+              <span className="text-ds-small px-6 text-center text-ds-neutral-450">
                 Click or drop an image here
               </span>
             )}
@@ -177,19 +185,19 @@ export default function ImageDB() {
         </div>
 
         {/* Right: prompt input */}
-        <div className="flex sm:w-1/2 flex-col gap-3">
+        <div className="flex w-full sm:w-1/2 flex-col gap-3">
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Paste the prompt you used to make this image…"
-            className="text-body min-h-[140px] flex-1 resize-none rounded-xl border border-ds-neutral-200 bg-ds-neutral-0 p-4 !text-[15px] !leading-[22px] text-ds-neutral-900 outline-none transition-colors placeholder:text-ds-neutral-450 focus:border-ds-neutral-400"
+            className="text-ds-body min-h-[120px] sm:min-h-[140px] flex-1 resize-none rounded-xl border border-ds-neutral-200 bg-ds-neutral-0 p-3 sm:p-4 text-ds-neutral-900 outline-none transition-colors placeholder:text-ds-neutral-450 focus:border-ds-neutral-400"
           />
           <button
             type="button"
             onClick={handleSave}
             onMouseDown={sounds.buttonPrimary}
             disabled={saving}
-            className="inline-flex h-11 items-center justify-center rounded-full px-4 text-[16px] font-medium leading-5 text-white transition-[transform,opacity] duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] hover:opacity-90 active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50"
+            className="text-ds-buttons inline-flex h-11 items-center justify-center rounded-full px-4 text-ds-neutral-0 transition-[transform,opacity] duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] hover:opacity-90 active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50"
             style={{
               background:
                 "linear-gradient(rgb(112, 169, 255) 0%, rgb(0, 95, 237) 50.4808%)",
@@ -203,13 +211,11 @@ export default function ImageDB() {
       </div>
 
       {error && (
-        <p className="text-[14px] font-medium text-[var(--alert-error-text)]">
-          {error}
-        </p>
+        <p className="text-ds-small text-[var(--alert-error-text)]">{error}</p>
       )}
 
       {!isSupabaseConfigured && (
-        <div className="rounded-xl border border-[var(--alert-warning-border)] bg-[var(--alert-warning-bg)] p-4 text-[14px] font-medium text-[var(--alert-warning-text)]">
+        <div className="text-ds-small rounded-xl border border-[var(--alert-warning-border)] bg-[var(--alert-warning-bg)] p-4 text-[var(--alert-warning-text)]">
           Supabase isn&apos;t connected yet. Add your project URL and anon key to{" "}
           <code>.env.local</code> and restart the dev server.
         </div>
@@ -217,10 +223,10 @@ export default function ImageDB() {
 
       {/* ── Saved library ──────────────────────────────────────── */}
       {loading ? (
-        <p className="text-caption">Loading your library…</p>
+        <p className="text-ds-small text-ds-neutral-500">Loading your library…</p>
       ) : entries.length === 0 ? (
         isSupabaseConfigured && (
-          <p className="text-caption">
+          <p className="text-ds-small text-ds-neutral-500">
             Nothing saved yet. Add your first image + prompt above.
           </p>
         )
@@ -229,13 +235,13 @@ export default function ImageDB() {
           {entries.map((entry) => (
             <div
               key={entry.id}
-              className="flex flex-col sm:flex-row gap-4 rounded-2xl border border-ds-neutral-200 bg-ds-neutral-0 p-4"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 rounded-2xl border border-ds-neutral-200 bg-ds-neutral-0 p-3 sm:p-4"
             >
               <a
                 href={entry.image_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="sm:w-1/2 shrink-0"
+                className="w-full sm:w-1/2 shrink-0"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -244,22 +250,22 @@ export default function ImageDB() {
                   className="aspect-square w-full rounded-xl border border-ds-neutral-200 object-contain bg-ds-neutral-50"
                 />
               </a>
-              <div className="flex sm:w-1/2 flex-col gap-3">
-                <p className="text-body flex-1 whitespace-pre-wrap !text-[15px] !leading-[22px] text-ds-neutral-900">
+              <div className="flex w-full sm:w-1/2 flex-col gap-3">
+                <p className="text-ds-body flex-1 whitespace-pre-wrap break-words text-ds-neutral-900">
                   {entry.prompt}
                 </p>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <button
                     type="button"
                     onClick={() => copyPrompt(entry.prompt)}
-                    className="inline-flex h-9 items-center justify-center rounded-full border border-ds-neutral-200 bg-ds-neutral-0 px-4 text-[14px] font-medium text-ds-neutral-700 transition-colors hfine:hover:bg-ds-neutral-100 active:scale-[0.96]"
+                    className="text-ds-small inline-flex h-9 items-center justify-center rounded-full border border-ds-neutral-200 bg-ds-neutral-0 px-4 text-ds-neutral-700 transition-colors hfine:hover:bg-ds-neutral-100 active:scale-[0.96]"
                   >
                     Copy prompt
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(entry)}
-                    className="inline-flex h-9 items-center justify-center rounded-full px-4 text-[14px] font-medium text-[var(--alert-error-text)] transition-colors hfine:hover:bg-[var(--alert-error-bg)] active:scale-[0.96]"
+                    className="text-ds-small inline-flex h-9 items-center justify-center rounded-full px-4 text-[var(--alert-error-text)] transition-colors hfine:hover:bg-[var(--alert-error-bg)] active:scale-[0.96]"
                   >
                     Delete
                   </button>
