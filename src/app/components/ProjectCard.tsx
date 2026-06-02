@@ -15,7 +15,7 @@ export default function ProjectCard({ name, description, background, onClick }: 
       onClick={onClick}
       onMouseEnter={sounds.cardHover}
       onMouseDown={sounds.cardPress}
-      className="project-card relative flex flex-col justify-end rounded-2xl bg-white cursor-pointer select-none w-full h-[320px] sm:h-[400px] overflow-hidden"
+      className="project-card relative flex flex-col justify-end rounded-2xl bg-white cursor-pointer select-none w-full h-[320px] sm:h-[500px] overflow-hidden"
     >
       {background && (
         <div className="absolute inset-0 w-full h-full">{background}</div>

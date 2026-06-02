@@ -161,7 +161,7 @@ body::before {
   top: 0;
   left: 0;
   right: 0;
-  height: 40px;
+  height: 64px;
   background: linear-gradient(to bottom, white 30%, transparent);
   pointer-events: none;
   z-index: 40;

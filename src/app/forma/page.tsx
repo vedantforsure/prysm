@@ -663,52 +663,35 @@ function ComponentSection({ name, description, code, children, overflowPreview, 
 
 export default function FormaPage() {
   return (
-    <main className="flex flex-1 flex-col bg-white overflow-x-clip">
-      {/* Back link — fixed top-left, above scroll mask */}
-      <div className="fixed top-5 left-5 z-50 hero-fade hero-fade-2">
-        <Link
-          href="/"
-          className="select-none inline-flex h-11 items-center gap-1.5 rounded-full px-4 text-body transition-[background-color,transform] duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] hover:bg-[#eeeeee] active:scale-[0.96] active:bg-[#bbbbbb]"
-          style={{
-            fontSize: "16px",
-            color: "#171717",
-            WebkitTapHighlightColor: "transparent",
-            touchAction: "manipulation",
-          }}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
-          </svg>
-          Back
-        </Link>
-      </div>
-
+    <main className="flex flex-1 flex-col gap-30 bg-white overflow-x-clip">
       {/* Component tree — fixed bottom-left, hidden on small screens */}
       <ComponentTree />
 
-      <div className="mx-auto w-full max-w-[700px] px-4 sm:px-0">
-        {/* Hero */}
-        <section className="pt-[80px] pb-[24px] sm:py-[60px] flex flex-col gap-3">
-          <h1
-            className="text-display hero-fade hero-fade-1 self-start"
-            style={{
-              lineHeight: "0.9",
-              background:
-                "linear-gradient(to right, rgba(0,136,255,0.3) 0%, #0088ff 35%, #0088ff 75%, rgba(0,136,255,0.3) 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            Forma
-          </h1>
-          <p className="text-body hero-fade hero-fade-3" style={{ maxWidth: "520px" }}>
-            A minimal, opinionated design system for React apps. Every component is built with the same easing, timing, and interaction model — so your UI feels coherent without extra effort.
-          </p>
+      {/* Hero */}
+      <section className="w-full px-5 pt-30 pb-20">
+          <div className="mx-auto flex max-w-content flex-col items-start gap-3 text-left">
+            <h1
+              className="text-display hero-fade hero-fade-1 self-start"
+              style={{
+                lineHeight: "0.9",
+                background:
+                  "linear-gradient(to right, rgba(0,136,255,0.3) 0%, #0088ff 35%, #0088ff 75%, rgba(0,136,255,0.3) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Forma
+            </h1>
+            <p className="text-body hero-fade hero-fade-3">
+              A minimal, opinionated design system for React apps. Every component is built with the same easing, timing, and interaction model — so your UI feels coherent without extra effort.
+            </p>
+          </div>
         </section>
 
-        {/* Component sections */}
-        <section className="flex flex-col gap-12 pb-[80px] sm:pb-[120px]">
+      {/* Component sections */}
+      <section className="w-full px-5 pt-30 pb-20">
+        <div className="mx-auto flex max-w-content flex-col gap-12">
 
           {/* ── Colors ── */}
           <ComponentSection
@@ -1900,16 +1883,17 @@ export function RadioGroup({ label, options, defaultValue = "", onChange }) {
             </div>
           </ComponentSection>
 
-        </section>
-      </div>
+        </div>
+      </section>
 
-      <div className="w-full px-4 py-[60px] sm:px-0 sm:py-[120px]">
-        <div className="mx-auto flex max-w-[700px] flex-row flex-wrap items-center justify-center gap-3">
+      <section className="w-full px-5 pt-30 pb-20">
+        <div className="mx-auto flex max-w-content flex-row flex-wrap items-center justify-center gap-3">
           <Link href="/"><SiteSecondaryButton className="!h-[66px] !px-6 !text-[24px]">Home</SiteSecondaryButton></Link>
           <a href="https://www.linkedin.com/in/vedant-lad-ba322b206/" target="_blank" rel="noopener noreferrer"><SiteSecondaryButton className="!h-[66px] !px-6 !text-[24px]">LinkedIn</SiteSecondaryButton></a>
           <a href="https://x.com/Vedantdzn" target="_blank" rel="noopener noreferrer"><SiteSecondaryButton className="!h-[66px] !px-6 !text-[24px]">X</SiteSecondaryButton></a>
+          <a href="https://cal.com/vedant-lad-uv3rmx/15min" target="_blank" rel="noopener noreferrer"><SiteSecondaryButton className="!h-[66px] !px-6 !text-[24px]">Get in touch</SiteSecondaryButton></a>
         </div>
-      </div>
+      </section>
     </main>
   );
 }

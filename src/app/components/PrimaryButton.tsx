@@ -19,6 +19,8 @@ export default function PrimaryButton({ children, onClick }: PrimaryButtonProps)
         boxShadow: "rgba(0, 0, 0, 0.12) 0px 2px 4px 0px",
         border: "1px solid rgba(255, 255, 255, 0.04)",
         color: "white",
+        fontSize: "16px",
+        lineHeight: "20px",
       }}
     >
       {children}

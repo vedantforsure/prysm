@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Hero from "./components/Hero";
 import ProjectCard from "./components/ProjectCard";
 import RevealSection from "./components/RevealSection";
@@ -14,21 +13,7 @@ export default function Home() {
       <Hero />
       <RevealSection className="w-full px-5 pt-30 pb-20">
         <div className="w-full flex flex-col gap-5">
-          <span
-            className="text-display sm:![font-size:44px] self-start"
-            style={{
-              fontSize: "32px",
-              lineHeight: "36px",
-              letterSpacing: "-1.5px",
-              background: "linear-gradient(to right, rgba(153,153,153,0.3) 0%, #999999 35%, #999999 75%, rgba(153,153,153,0.3) 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            Work
-          </span>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <ProjectCard
             name="Forma"
             description="A minimal, opinionated design system for React apps."
@@ -66,14 +51,25 @@ export default function Home() {
               </>
             }
           />
+          <ProjectCard
+            name="AI Experiments"
+            description="Playful prototypes exploring what happens at the intersection of AI and design."
+            onClick={() => router.push("/ai-experiments")}
+            background={
+              <>
+                <img src="/card-bg.png" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "50% 100%", outline: "1px solid rgba(255,255,255,0.06)" }} />
+                <img src="/globe.svg" alt="" className="absolute inset-0 m-auto w-16 h-16 object-contain pointer-events-none" style={{ filter: "brightness(0) invert(1)" }} />
+              </>
+            }
+          />
           </div>
         </div>
       </RevealSection>
       <RevealSection className="w-full px-5 pt-30 pb-20">
         <div className="mx-auto flex max-w-content flex-row flex-wrap items-center justify-center gap-3">
-          <Link href="/ai-experiments"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">AI experiments</SecondaryButton></Link>
           <a href="https://www.linkedin.com/in/vedant-lad-ba322b206/" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">LinkedIn</SecondaryButton></a>
           <a href="https://x.com/Vedantdzn" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">X</SecondaryButton></a>
+          <a href="https://cal.com/vedant-lad-uv3rmx/15min" target="_blank" rel="noopener noreferrer"><SecondaryButton className="!h-[66px] !px-6 !text-[24px]">Get in touch</SecondaryButton></a>
         </div>
       </RevealSection>
     </main>
