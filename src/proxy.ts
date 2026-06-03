@@ -3,6 +3,10 @@ import type { NextRequest } from "next/server";
 
 export const AUTH_COOKIE = "imgdb_auth";
 
+// Login is always required. If SITE_PASSWORD isn't set in the environment,
+// this fallback is used so the gate still works (change it / set the env var).
+export const SITE_PASSWORD = process.env.SITE_PASSWORD || "prompt-library";
+
 // SHA-256 hex digest, available in the Edge runtime via Web Crypto.
 async function sha256(input: string): Promise<string> {
   const data = new TextEncoder().encode(input);
@@ -13,13 +17,8 @@ async function sha256(input: string): Promise<string> {
 }
 
 export async function proxy(request: NextRequest) {
-  const password = process.env.SITE_PASSWORD;
-
-  // No password configured → gate is off (e.g. local dev). Let everything through.
-  if (!password) return NextResponse.next();
-
   const token = request.cookies.get(AUTH_COOKIE)?.value;
-  const expected = await sha256(password);
+  const expected = await sha256(SITE_PASSWORD);
 
   if (token && token === expected) return NextResponse.next();
 

@@ -2,9 +2,10 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { sounds } from "@/lib/sounds";
+import PrimaryButton from "@/app/components/PrimaryButton";
+import LoginBackground from "@/app/components/LoginBackground";
 
-function LoginForm() {
+function LoginForm({ onSuccess }: { onSuccess: () => void }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get("from") || "/";
@@ -24,15 +25,20 @@ function LoginForm() {
         body: JSON.stringify({ password }),
       });
       if (res.ok) {
-        router.replace(from);
-        router.refresh();
+        // Play the immersive warp, then navigate once it has essentially
+        // finished — so the route render doesn't contend with the animation.
+        onSuccess();
+        setTimeout(() => {
+          router.replace(from);
+          router.refresh();
+        }, 1100);
       } else {
         setError(true);
         setPassword("");
+        setLoading(false);
       }
     } catch {
       setError(true);
-    } finally {
       setLoading(false);
     }
   }
@@ -46,7 +52,7 @@ function LoginForm() {
     >
       <div className="flex flex-col gap-1">
         <h1 className="text-ds-h1 text-ds-neutral-900">Protected</h1>
-        <p className="text-ds-small text-ds-neutral-500">
+        <p className="text-ds-body text-ds-neutral-600">
           Enter the password to access the image library.
         </p>
       </div>
@@ -73,30 +79,30 @@ function LoginForm() {
         </p>
       )}
 
-      <button
-        type="submit"
-        onMouseDown={sounds.buttonPrimary}
-        disabled={loading || !password}
-        className="text-ds-buttons inline-flex h-11 items-center justify-center rounded-full px-4 text-ds-neutral-0 transition-[transform,opacity] duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] hover:opacity-90 active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50"
-        style={{
-          background:
-            "linear-gradient(rgb(112, 169, 255) 0%, rgb(0, 95, 237) 50.4808%)",
-          boxShadow: "rgba(0, 0, 0, 0.12) 0px 2px 4px 0px",
-          border: "1px solid rgba(255, 255, 255, 0.04)",
-        }}
-      >
+      <PrimaryButton type="submit" disabled={loading || !password} className="w-full">
         {loading ? "Checking…" : "Enter"}
-      </button>
+      </PrimaryButton>
     </form>
   );
 }
 
 export default function LoginPage() {
+  const [launching, setLaunching] = useState(false);
+
   return (
-    <main className="flex flex-1 items-center justify-center px-5 py-20">
-      <Suspense fallback={null}>
-        <LoginForm />
-      </Suspense>
+    <main className="relative flex flex-1 items-center justify-center overflow-hidden px-5 py-20">
+      <LoginBackground launching={launching} />
+      <div
+        className="relative z-10 w-full transition-[opacity,transform] duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
+        style={{
+          opacity: launching ? 0 : 1,
+          transform: launching ? "scale(1.06)" : "scale(1)",
+        }}
+      >
+        <Suspense fallback={null}>
+          <LoginForm onSuccess={() => setLaunching(true)} />
+        </Suspense>
+      </div>
     </main>
   );
 }

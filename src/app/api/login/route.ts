@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AUTH_COOKIE } from "@/proxy";
+import { AUTH_COOKIE, SITE_PASSWORD } from "@/proxy";
 
 async function sha256(input: string): Promise<string> {
   const data = new TextEncoder().encode(input);
@@ -10,12 +10,7 @@ async function sha256(input: string): Promise<string> {
 }
 
 export async function POST(request: Request) {
-  const password = process.env.SITE_PASSWORD;
-
-  // If no password is configured the gate is off; nothing to authenticate against.
-  if (!password) {
-    return NextResponse.json({ ok: true });
-  }
+  const password = SITE_PASSWORD;
 
   let submitted = "";
   try {

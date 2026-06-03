@@ -22,6 +22,68 @@
   animation: shimmer-headline 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+/* ── Modal enter / exit (driven by data-open) ──────────────── */
+.modal-overlay {
+  opacity: 1;
+  transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.modal-overlay[data-open="false"] { opacity: 0; }
+@starting-style {
+  .modal-overlay[data-open="true"] { opacity: 0; }
+}
+
+.modal-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1),
+              transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.modal-panel[data-open="false"] {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+}
+@starting-style {
+  .modal-panel[data-open="true"] {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+/* ── Masonry tile entrance (staggered) ─────────────────────── */
+.masonry-item {
+  opacity: 0;
+  animation: masonry-in 300ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+@keyframes masonry-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.masonry-item:nth-child(1) { animation-delay: 0ms; }
+.masonry-item:nth-child(2) { animation-delay: 40ms; }
+.masonry-item:nth-child(3) { animation-delay: 80ms; }
+.masonry-item:nth-child(4) { animation-delay: 120ms; }
+.masonry-item:nth-child(5) { animation-delay: 160ms; }
+.masonry-item:nth-child(6) { animation-delay: 200ms; }
+.masonry-item:nth-child(7) { animation-delay: 240ms; }
+.masonry-item:nth-child(8) { animation-delay: 280ms; }
+
+/* ── Bottom CTA entrance ───────────────────────────────────── */
+.cta-fade {
+  animation: cta-in 400ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+@keyframes cta-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Modals: fade only, no scale/slide */
+  .modal-panel { transform: none !important; }
+  /* Tile/CTA: appear without movement */
+  .masonry-item { animation: none; opacity: 1; }
+  .cta-fade { animation: none; }
+}
+
 @keyframes shake {
   0%   { transform: translateX(0); }
   15%  { transform: translateX(-6px); }
@@ -114,7 +176,6 @@
   --text-ds-buttons--line-height: 20px;
   --text-ds-buttons--font-weight: 500;
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 
   /* Layout container widths */
   --container-content: 800px;
@@ -148,31 +209,13 @@
 
 html {
   overflow-x: hidden;
+  background: #ffffff;
+  min-height: 100vh;
 }
 
 body {
-  background: var(--background);
+  background: transparent;
   color: var(--foreground);
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  background: linear-gradient(to bottom, white 30%, transparent);
-  pointer-events: none;
-  z-index: 40;
-  opacity: 0;
-  animation: fade-overlay linear forwards;
-  animation-timeline: scroll(root);
-  animation-range: 0px 80px;
-}
-
-@keyframes fade-overlay {
-  to { opacity: 1; }
 }
 
 @utility ease-ds {
@@ -264,11 +307,11 @@ button, [role="button"], .project-card {
 }
 
 .text-display {
-  font-family: 'Nunito', sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
   font-size: 48px;
   line-height: 64px;
   letter-spacing: -3px;
-  font-weight: 800;
+  font-weight: 600;
   text-wrap: balance;
 }
 

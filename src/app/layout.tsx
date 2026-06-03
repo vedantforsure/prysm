@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import "@fontsource/nunito/800.css";
-import Navbar from "./components/Navbar";
 import { Toaster } from "sonner";
+import BottomBlur from "./components/BottomBlur";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,7 +17,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable} ${GeistSans.className} h-full antialiased`}
+      className={`${GeistSans.variable} ${GeistSans.className} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <svg width="0" height="0" style={{ position: "absolute" }}>
@@ -30,9 +28,9 @@ export default function RootLayout({
             </filter>
           </defs>
         </svg>
-        <div className="w-full h-16 bg-ds-neutral-0" />
-        <Navbar />
+        <div className="w-full h-16" />
         {children}
+        <BottomBlur />
 <Toaster position="bottom-right" />
       </body>
     </html>

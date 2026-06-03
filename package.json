@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@fontsource/nunito": "^5.2.7",
     "@fontsource/open-runde": "^5.2.1",
     "@paper-design/shaders-react": "^0.0.76",
     "@supabase/supabase-js": "^2.107.0",
