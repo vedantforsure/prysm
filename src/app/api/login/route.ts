@@ -12,6 +12,11 @@ async function sha256(input: string): Promise<string> {
 export async function POST(request: Request) {
   const password = SITE_PASSWORD;
 
+  // No password configured → gate is off; nothing to authenticate against.
+  if (!password) {
+    return NextResponse.json({ ok: true });
+  }
+
   let submitted = "";
   try {
     const body = await request.json();
