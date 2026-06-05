@@ -178,7 +178,7 @@
   --font-sans: var(--font-geist-sans);
 
   /* Layout container widths */
-  --container-content: 800px;
+  --container-content: 1080px;
   --container-nav:     1920px;
 }
 
