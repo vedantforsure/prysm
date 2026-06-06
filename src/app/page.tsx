@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main id="top" className="flex flex-1 flex-col gap-10 sm:gap-15 bg-white">
       <Hero />
-      <RevealSection className="w-full px-5 pt-10 pb-10 sm:pt-30 sm:pb-20">
+      <RevealSection className="w-full px-5 pt-10 pb-10 sm:pt-20 sm:pb-20">
         <div className="mx-auto flex max-w-content flex-col gap-12">
           <ImageDB />
         </div>

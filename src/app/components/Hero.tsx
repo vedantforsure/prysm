@@ -4,7 +4,7 @@ import { sounds } from "@/lib/sounds";
 
 export default function Hero() {
   return (
-    <section className="w-full px-5 pt-10 pb-10 sm:pt-30 sm:pb-15">
+    <section className="w-full px-5 pt-10 pb-10 sm:pt-30 sm:pb-5">
       <div className="mx-auto flex max-w-content flex-col items-center gap-3 text-center">
         <h1 className="sr-only">Prysm</h1>
         {/* eslint-disable-next-line @next/next/no-img-element */}
