@@ -52,7 +52,7 @@ export default function BottomBlur() {
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(to top, rgba(135,215,255,0.9) 0%, transparent 75%)",
+            "linear-gradient(to top, rgba(255,255,255,0.9) 0%, transparent 75%)",
         }}
       />
     </div>
