@@ -315,6 +315,8 @@ export default function ImageDB() {
               key={entry.id}
               type="button"
               onClick={() => setSelected(entry)}
+              onMouseEnter={sounds.cardHover}
+              onMouseDown={sounds.cardPress}
               className="masonry-item group relative mb-3 block w-full overflow-hidden rounded-xl border border-black/10 bg-ds-neutral-50 break-inside-avoid transition-transform duration-200 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] hfine:hover:scale-[1.01] active:scale-[0.97] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}

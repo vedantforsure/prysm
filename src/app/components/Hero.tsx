@@ -4,27 +4,21 @@ import { sounds } from "@/lib/sounds";
 
 export default function Hero() {
   return (
-    <section className="w-full px-5 pt-10 pb-10 sm:pt-30 sm:pb-20">
+    <section className="w-full px-5 pt-10 pb-10 sm:pt-30 sm:pb-15">
       <div className="mx-auto flex max-w-content flex-col items-center gap-3 text-center">
-        <h1
+        <h1 className="sr-only">Prysm</h1>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/prysm-logo.webp"
+          alt="Prysm"
           onMouseDown={sounds.buttonSecondary}
-          className="text-display hero-fade hero-fade-1 cursor-pointer select-none transition-transform duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
+          className="hero-fade hero-fade-1 w-[260px] max-w-[80vw] cursor-pointer select-none transition-transform duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] sm:w-[420px]"
           style={{
-            display: "inline-block",
-            lineHeight: "1",
-            paddingRight: "0.08em",
-            paddingBottom: "0.12em",
-            background:
-              "linear-gradient(to right, rgba(255,77,166,0.3) 0%, #ff4da6 35%, #ff4da6 75%, rgba(255,77,166,0.3) 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
             WebkitTapHighlightColor: "transparent",
             touchAction: "manipulation",
           }}
-        >
-          Prysm
-        </h1>
+          draggable={false}
+        />
         <p className="text-ds-body text-ds-neutral-600 hero-fade hero-fade-3 max-w-[450px] [text-wrap:pretty]">
           A growing collection of images and the exact prompts used to make them.
         </p>
