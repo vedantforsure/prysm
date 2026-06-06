@@ -17,9 +17,11 @@ export default function Home() {
           <div className="flex flex-row flex-wrap items-center justify-center gap-3">
             <a href="#top"><SecondaryButton className="!h-[54px] sm:!h-[66px] !px-5 sm:!px-6 !text-[19px] sm:!text-[24px]">Go to top</SecondaryButton></a>
           </div>
-          <p className="text-[16px] text-ds-neutral-500">Made with ❤️ by Vedant</p>
         </div>
       </RevealSection>
+      <footer className="w-full px-5 pb-6 pt-2">
+        <p className="text-center text-[16px] text-ds-neutral-500">Made with ❤️ by Vedant</p>
+      </footer>
     </main>
   );
 }
